@@ -1,0 +1,1959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STARMAP // GitHub Starred Repos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Oxanium:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:       #07070f;
+  --bg2:      #0c0c1c;
+  --bg3:      #111128;
+  --bg4:      #181830;
+  --border:   #181835;
+  --borderB:  #272754;
+  --cyan:     #00e5ff;
+  --cyanD:    #00b0cc;
+  --mag:      #ff0090;
+  --yel:      #ffd600;
+  --grn:      #00ff88;
+  --red:      #ff3355;
+  --text:     #b8c8dc;
+  --textD:    #50607a;
+  --textB:    #ddeeff;
+  --card:     #0a0a1e;
+  --sw:       300px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'JetBrains Mono',monospace;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,0.06) 3px,rgba(0,0,0,0.06) 4px);
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(0,229,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,0.025) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ── HEADER ─────────────────────────────────── */
+#hdr{
+  position:relative;z-index:100;
+  background:rgba(7,7,15,0.96);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--borderB);
+  padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+}
+.logo{
+  font-family:'Orbitron',monospace;font-size:1.25rem;font-weight:900;
+  color:var(--cyan);text-shadow:0 0 24px rgba(0,229,255,0.55);letter-spacing:5px;white-space:nowrap;
+}
+.logo em{color:var(--mag);font-style:normal;text-shadow:0 0 24px rgba(255,0,144,0.55);}
+.hdr-input-wrap{display:flex;gap:8px;flex:1;min-width:220px;max-width:460px;}
+.inp{
+  background:var(--bg3);border:1px solid var(--borderB);color:var(--textB);
+  font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:7px 11px;outline:none;
+  transition:border-color .2s,box-shadow .2s;flex:1;
+}
+.inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.1);}
+.btn{
+  background:transparent;border:1px solid var(--cyan);color:var(--cyan);
+  font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:7px 14px;cursor:pointer;
+  transition:all .2s;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;
+}
+.btn:hover{background:rgba(0,229,255,.1);box-shadow:0 0 14px rgba(0,229,255,.3);}
+.btn-mag{border-color:var(--mag);color:var(--mag);}
+.btn-mag:hover{background:rgba(255,0,144,.1);box-shadow:0 0 14px rgba(255,0,144,.3);}
+#hdr-meta{font-size:.65rem;color:var(--textD);white-space:nowrap;margin-left:auto;}
+#hdr-meta b{color:var(--cyan);}
+
+/* ── API TOKEN MODAL ─────────────────────────── */
+.modal-overlay {
+  position:fixed;inset:0;background:rgba(7,7,15,.85);backdrop-filter:blur(5px);
+  z-index:9000;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+}
+.modal-overlay.show { opacity:1;pointer-events:auto; }
+.modal {
+  background:var(--bg2);border:1px solid var(--borderB);padding:24px;
+  max-width:420px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.6);
+  border-top:2px solid var(--cyan);
+}
+.modal h2 { font-family:'Orbitron',monospace;color:var(--cyan);font-size:1.1rem;margin-bottom:12px;letter-spacing:2px; }
+.modal p { font-size:.75rem;color:var(--textD);margin-bottom:16px;line-height:1.5; }
+.modal input { width:100%;margin-bottom:16px; }
+.modal-actions { display:flex;gap:10px;justify-content:flex-end; }
+
+/* ── REPO DETAILS MODAL ──────────────────────── */
+.rm-overlay {
+  position:fixed;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(8px);
+  z-index:9500;display:flex;align-items:center;justify-content:center;
+  opacity:0;pointer-events:none;transition:opacity .2s ease;
+}
+.rm-overlay.show { opacity:1;pointer-events:auto; }
+.repo-modal {
+  background:var(--bg);border:1px solid var(--borderB);width:90vw;max-width:950px;
+  height:85vh;display:flex;flex-direction:column;border-top:2px solid var(--cyan);
+  box-shadow:0 15px 50px rgba(0,0,0,0.8);
+}
+.rm-header {
+  padding:15px 20px;border-bottom:1px solid var(--border);display:flex;
+  justify-content:space-between;align-items:center;background:var(--bg2);
+}
+.rm-header h2 { font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--textB);word-break:break-all; }
+.rm-header h2 span { color:var(--cyan); }
+.rm-close { background:none;border:none;color:var(--textD);cursor:pointer;font-size:1.4rem;transition:color .2s; }
+.rm-close:hover { color:var(--red); }
+.rm-tabs { display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto; }
+.rm-tab {
+  background:none;border:none;color:var(--textD);padding:12px 18px;
+  font-family:'JetBrains Mono',monospace;font-size:.75rem;cursor:pointer;
+  text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;
+}
+.rm-tab:hover { color:var(--textB); }
+.rm-tab.active { color:var(--cyan);border-bottom-color:var(--cyan);background:rgba(0,229,255,.05); }
+.rm-content { flex:1;overflow-y:auto;padding:20px;background:var(--bg);position:relative; }
+.rm-loading, .rm-empty { text-align:center;padding:60px 20px;color:var(--textD);font-size:.85rem;line-height:1.6; }
+.rm-empty p { margin-bottom: 20px; }
+
+/* Readme Markdown Styles (Using Oxanium!) */
+.markdown-body { color:var(--text);font-family:'Oxanium', sans-serif;line-height:1.6;font-size:1rem; }
+.markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color:var(--textB);border-bottom:1px solid var(--border);padding-bottom:0.3em;margin-top:1.5em;margin-bottom:16px; font-weight:600; }
+.markdown-body h1 { font-size: 1.8rem; }
+.markdown-body h2 { font-size: 1.4rem; }
+.markdown-body a { color:var(--cyan);text-decoration:none; }
+.markdown-body a:hover { text-decoration:underline; }
+.markdown-body p, .markdown-body ul, .markdown-body ol { margin-bottom: 16px; }
+.markdown-body ul, .markdown-body ol { padding-left: 2em; }
+.markdown-body pre, .markdown-body code { background:var(--bg3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em; }
+.markdown-body code { padding:0.2em 0.4em; }
+.markdown-body pre { padding:16px;overflow:auto;border:1px solid var(--borderB); }
+.markdown-body pre code { background:transparent;padding:0; }
+.markdown-body img { max-width:100%;background:var(--bg2); }
+.markdown-body blockquote { border-left:4px solid var(--borderB);padding-left:1em;color:var(--textD);margin-left:0;margin-bottom:16px; }
+.markdown-body table { border-collapse:collapse;width:100%;margin-bottom:16px; }
+.markdown-body th, .markdown-body td { border:1px solid var(--borderB);padding:8px 12px; }
+.markdown-body th { background:var(--bg2); }
+
+/* Extensively Styled Issues / PRs */
+.rm-issue { border-bottom:1px solid var(--border);padding:14px 0;display:flex;flex-direction:column;gap:8px; }
+.rm-issue:last-child { border-bottom:none; }
+.rmi-top { display:flex;justify-content:space-between;align-items:flex-start;gap:12px; }
+.rmi-title-wrap { display:flex;flex-direction:column;gap:6px;flex:1; }
+.rmi-title-row { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
+.rmi-status { font-family:'JetBrains Mono', monospace; font-size:.6rem; padding:3px 6px; border:1px solid; border-radius:3px; text-transform:uppercase; font-weight:bold; letter-spacing:1px; flex-shrink:0;}
+.rmi-status.open { border-color:var(--grn); color:var(--grn); background:rgba(0,255,136,0.1); }
+.rmi-status.draft { border-color:var(--textD); color:var(--textD); background:rgba(80,96,122,0.1); }
+.rmi-title { font-size:.95rem;font-weight:600;line-height:1.4; font-family:'Oxanium', sans-serif; }
+.rmi-title a { color:var(--textB);text-decoration:none; }
+.rmi-title a:hover { color:var(--cyan);text-decoration:underline; }
+.rmi-labels { display:flex;flex-wrap:wrap;gap:4px; }
+.rmi-label { font-size:0.65rem;padding:2px 7px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:0.3px; border:1px solid rgba(255,255,255,0.1); }
+.rmi-side { display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0; }
+.rmi-comments { display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--textD);font-family:'JetBrains Mono',monospace; }
+.rmi-assignees { display:flex;gap:4px; }
+.rmi-assignee { width:22px;height:22px;border-radius:50%;border:1px solid var(--borderB); }
+.rmi-meta { font-size:.75rem;color:var(--textD);font-family:'Oxanium', sans-serif; display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
+.rmi-meta a { color:var(--textD);text-decoration:none; font-weight:600;}
+.rmi-meta a:hover { color:var(--text); }
+.rmi-avatar { width:16px;height:16px;border-radius:50%;vertical-align:middle;margin-right:4px; }
+
+/* ── PROGRESS ────────────────────────────────── */
+#pbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:9998;
+  background:linear-gradient(90deg,var(--cyan),var(--mag));box-shadow:0 0 10px var(--cyan);transition:width .3s;}
+
+/* ── LOADING OVERLAY ─────────────────────────── */
+#loading{
+  position:fixed;inset:0;background:rgba(7,7,15,.97);z-index:500;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+}
+#loading.hidden{display:none;}
+.ld-title{font-family:'Orbitron',monospace;font-size:1.1rem;color:var(--cyan);letter-spacing:7px;animation:pulse 1.4s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.ld-wrap{width:280px;height:2px;background:var(--border);}
+.ld-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--mag));box-shadow:0 0 8px var(--cyan);transition:width .3s;width:0;}
+.ld-status{font-size:.72rem;color:var(--textD);}
+
+/* ── LAYOUT ──────────────────────────────────── */
+.app{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+/* ── SIDEBAR ─────────────────────────────────── */
+#sb{
+  width:var(--sw);min-width:var(--sw);background:var(--bg2);border-right:1px solid var(--borderB);
+  padding:14px 12px;overflow-y:auto;position:sticky;top:0;height:100vh;
+  scrollbar-width:thin;scrollbar-color:var(--borderB) transparent;align-self:flex-start;
+}
+.sb-sec{margin-bottom:18px;}
+.sb-title{
+  font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:3px;color:var(--cyan);
+  text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;
+}
+.sb-search{width:100%;margin-bottom:6px;font-size:.72rem;}
+.fl-list{max-height:240px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--borderB) transparent;}
+.fl-item{
+  display:flex;align-items:center;gap:7px;padding:3px 2px;cursor:pointer;font-size:.72rem;
+  transition:color .15s;border-radius:1px;user-select:none;
+}
+.fl-item:hover{color:var(--cyan);}
+.fl-cnt{margin-left:auto;color:var(--textD);font-size:.6rem;}
+.fl-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.radio-grp{display:flex;flex-direction:column;gap:5px;}
+.radio-item{display:flex;align-items:center;gap:7px;font-size:.72rem;cursor:pointer;user-select:none;}
+.radio-item input{accent-color:var(--mag);cursor:pointer;}
+.sb-clear{font-size:.6rem;color:var(--textD);cursor:pointer;margin-left:auto;}
+.sb-clear:hover{color:var(--red);}
+#star-range-val{color:var(--cyan);font-size:.65rem;}
+input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
+.range-labels{display:flex;justify-content:space-between;font-size:.6rem;color:var(--textD);margin-top:2px;}
+
+/* 3-State Checkbox */
+.cb {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:13px; height:13px; border:1px solid var(--borderB); border-radius:2px;
+  flex-shrink:0; font-size:9px; font-weight:bold; color:transparent; transition:all .15s;
+}
+.cb.on { border-color:var(--cyan); background:rgba(0,229,255,.15); color:var(--cyan); }
+.cb.exc { border-color:var(--red); background:rgba(255,51,85,.15); color:var(--red); }
+
+/* ── STICKY TOP RAIL (sort + stats combined) ─── */
+#top-rail{
+  position:sticky;top:0;z-index:50;
+  background:var(--bg2);border-bottom:1px solid var(--borderB);
+}
+
+/* ── SORT / VIEW BAR ─────────────────────────── */
+#sortbar{
+  padding:7px 16px;display:flex;align-items:center;gap:8px;
+  border-bottom:1px solid var(--border);flex-wrap:nowrap;overflow:hidden;
+}
+.sort-lbl{font-size:.65rem;color:var(--textD);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+select{
+  background:var(--bg3);border:1px solid var(--borderB);color:var(--textB);
+  font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:5px 8px;outline:none;cursor:pointer;
+  min-width:0;flex-shrink:1;
+}
+select:focus{border-color:var(--cyan);}
+#dir-btn{
+  background:transparent;border:1px solid var(--borderB);color:var(--textD);
+  font-family:'JetBrains Mono',monospace;font-size:.8rem;width:28px;height:28px;cursor:pointer;flex-shrink:0;
+  transition:all .2s;display:flex;align-items:center;justify-content:center;
+}
+#dir-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+.sort-spacer{flex:1;min-width:4px;}
+.view-tog{display:flex;gap:3px;flex-shrink:0;}
+.vbtn{
+  padding:4px 9px;border:1px solid var(--borderB);background:transparent;color:var(--textD);
+  cursor:pointer;font-size:.75rem;transition:all .2s;flex-shrink:0;
+}
+.vbtn.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);}
+
+/* ── STATS STRIP ─────────────────────────────── */
+#statsbar{
+  padding:4px 16px;font-size:.64rem;color:var(--textD);background:var(--bg2);
+  display:flex;gap:0;align-items:center;flex-wrap:nowrap;overflow:hidden;min-height:24px;
+}
+#statsbar b{color:var(--cyan);}
+#statsbar em{color:var(--mag);font-style:normal;}
+.sbar-item{white-space:nowrap;padding:0 10px;border-right:1px solid var(--border);flex-shrink:0;}
+.sbar-item:first-child{padding-left:0;}
+.sbar-item:last-child{border-right:none;}
+#cache-badge{
+  margin-left:auto;padding:1px 6px;font-size:.58rem;letter-spacing:1px;flex-shrink:0;
+  border:1px solid var(--border);color:var(--textD);
+}
+#cache-badge.live{border-color:rgba(255,0,144,.35);color:var(--mag);}
+#cache-badge.cached{border-color:rgba(0,255,136,.35);color:var(--grn);}
+
+/* ── MAIN ────────────────────────────────────── */
+#main{flex:1;overflow:visible;min-width:0;}
+#repos-wrap{padding:14px 16px;}
+.repos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:stretch;}
+.repos-list{display:flex;flex-direction:column;gap:8px;}
+
+/* ── REPO CARD ───────────────────────────────── */
+.rc{
+  background:var(--card);border:1px solid var(--border);padding:13px;position:relative;
+  transition:border-color .18s,box-shadow .18s;animation:fadeUp .28s ease both;
+  display:flex;flex-direction:column;height:100%;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rc::before{
+  content:'';position:absolute;top:0;right:0;width:9px;height:9px;
+  border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);
+}
+.rc:hover{border-color:var(--cyanD);box-shadow:0 0 22px rgba(0,229,255,.07);}
+.rc.archived{border-color:rgba(255,214,0,.3);}
+.rc.archived::before{border-color:var(--yel);}
+.rc.archived:hover{border-color:var(--yel);box-shadow:0 0 22px rgba(255,214,0,.07);}
+
+.rc-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+
+/* Interactive Repo Name */
+.rc-name{
+  font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;color:var(--textB);
+  cursor:pointer;flex:1;word-break:break-word;line-height:1.4;transition:color .2s;
+}
+.rc-name:hover{color:var(--cyan);}
+
+.rc-owner{font-size:.6rem;color:var(--textD);margin-bottom:4px;}
+
+.badge{font-size:.55rem;padding:2px 5px;border:1px solid;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.ba{border-color:var(--yel);color:var(--yel);}
+.bm{border-color:var(--mag);color:var(--mag);}
+.bf{border-color:var(--textD);color:var(--textD);}
+
+.rc-desc{font-size:.72rem;color:var(--text);margin-bottom:8px;line-height:1.55;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+
+.rc-stats{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
+.stat{display:flex;align-items:center;gap:3px;font-size:.68rem;color:var(--textD);}
+.stat-click { cursor:pointer;transition:color .2s; }
+.stat-click:hover { color:var(--cyan); }
+.stat svg{width:11px;height:11px;flex-shrink:0;}
+.lang-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;}
+
+/* ── TAGS ────────────────────────────────────── */
+.tags-wrapper{margin-bottom:10px;}
+.tags-row{display:flex;flex-wrap:wrap;gap:4px;}
+.tags-expander{
+  font-size:.55rem;color:var(--cyanD);cursor:pointer;background:none;border:none;
+  padding:5px 0 0 0;font-family:'JetBrains Mono',monospace;transition:color .2s;
+}
+.tags-expander:hover{color:var(--cyan);}
+
+.tag{display:inline-block;font-size:.58rem;padding:2px 5px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.05);color:var(--cyanD);cursor:pointer;transition:all .15s;letter-spacing:.3px;}
+.tag:hover,.tag.on{background:rgba(0,229,255,.14);border-color:var(--cyan);color:var(--cyan);}
+
+/* Negative "Exclude" State */
+.tag.exc, .tag-p.exc, .tag-a.exc {
+  background:rgba(255,51,85,.14) !important;
+  border-color:var(--red) !important;
+  color:var(--red) !important;
+  text-decoration: line-through;
+}
+
+.tag-p{border-color:rgba(255,214,0,.25);color:var(--yel);background:rgba(255,214,0,.05);}
+.tag-p:hover,.tag-p.on{background:rgba(255,214,0,.14);border-color:var(--yel);}
+.tag-a{border-color:rgba(255,165,0,.35);color:#ffba55;background:rgba(255,140,0,.07);}
+.tag-a:hover,.tag-a.on{background:rgba(255,165,0,.14);border-color:#ffba55;color:#ffba55;}
+
+.rc-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;padding-top:10px;}
+.abtn{
+  font-size:.62rem;padding:4px 8px;background:transparent;border:1px solid var(--borderB);
+  color:var(--textD);cursor:pointer;transition:all .15s;text-decoration:none;
+  display:inline-flex;align-items:center;gap:3px;font-family:'JetBrains Mono',monospace;
+}
+.abtn:hover{border-color:var(--cyan);color:var(--cyan);}
+.abtn-m{border-color:rgba(255,0,144,.3);color:var(--mag);}
+.abtn-m:hover{border-color:var(--mag);background:rgba(255,0,144,.07);}
+
+/* list-view card */
+.repos-list .rc{display:flex;flex-direction:column;gap:5px;}
+
+/* ── EMPTY STATE ─────────────────────────────── */
+.empty{text-align:center;padding:60px 20px;color:var(--textD);}
+.empty h3{font-family:'Orbitron',monospace;color:var(--textD);margin-bottom:8px;font-size:.9rem;letter-spacing:3px;}
+
+/* ── SCROLLBAR ───────────────────────────────── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--borderB);}
+::-webkit-scrollbar-thumb:hover{background:var(--cyanD);}
+
+/* ── RESPONSIVE ──────────────────────────────── */
+@media(max-width:820px){
+  #sb{display:none;}
+  .repos-grid{grid-template-columns:1fr;}
+}
+@media(max-width:520px){
+  #hdr{gap:8px;}
+  .logo{font-size:1rem;}
+  .rm-header h2 { font-size: .9rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="pbar"></div>
+
+<div id="loading">
+  <div class="ld-title">STARMAP</div>
+  <div class="ld-wrap"><div class="ld-fill" id="ld-fill"></div></div>
+  <div class="ld-status" id="ld-status">Initializing…</div>
+  <div style="font-size:.65rem;color:#303050;margin-top:8px;">Fetching from GitHub API · Pagination in progress</div>
+</div>
+
+<div id="hdr">
+  <div class="logo">STAR<em>MAP</em></div>
+  <div class="hdr-input-wrap">
+    <input class="inp" id="uname-inp" type="text" placeholder="github username" value="sametaor">
+    <button class="btn" onclick="startFetch(true)">FETCH</button>
+    <button class="btn btn-mag" onclick="startFetch(false)" id="refresh-btn" title="Force refresh (bypass cache)">↺</button>
+    <button class="btn" id="key-btn" onclick="openTokenModal()" title="API Token Settings" style="border-color:var(--borderB);color:var(--textD);padding:7px 10px;">🔑</button>
+  </div>
+  <div id="hdr-meta">Last updated: <b id="last-upd">—</b></div>
+</div>
+
+<div class="modal-overlay" id="token-overlay" onclick="if(event.target===this) closeTokenModal()">
+  <div class="modal">
+    <h2>API Rate Limits</h2>
+    <p>Unauthenticated GitHub requests are limited to 60 per hour. Provide a GitHub Personal Access Token (PAT) to increase this limit to 5,000 per hour.</p>
+    <p style="font-size:0.65rem; color:var(--textD); margin-bottom:12px;"><em>Your token is stored locally in your browser and never sent anywhere except directly to GitHub's API. A fine-grained token with "Public Repositories (read-only)" access is recommended.</em></p>
+    <input type="password" class="inp" id="gh-token-inp" placeholder="ghp_xxxxxxxxxxxx...">
+    <div class="modal-actions">
+      <button class="btn" style="border-color:var(--borderB); color:var(--textD);" onclick="clearToken()">CLEAR</button>
+      <button class="btn" onclick="closeTokenModal()">CANCEL</button>
+      <button class="btn" style="border-color:var(--grn); color:var(--grn);" onclick="saveToken()">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class="rm-overlay" id="repo-modal-overlay" onclick="if(event.target===this) closeRepoModal()">
+  <div class="repo-modal">
+    <div class="rm-header">
+      <h2 id="rm-title">Owner / <span>Repo</span></h2>
+      <button class="rm-close" onclick="closeRepoModal()">✕</button>
+    </div>
+    <div class="rm-tabs">
+      <button class="rm-tab active" data-tab="readme" onclick="loadRepoTab('readme')">README.md</button>
+      <button class="rm-tab" data-tab="issues" onclick="loadRepoTab('issues')">Issues</button>
+      <button class="rm-tab" data-tab="prs" onclick="loadRepoTab('prs')">Pull Requests</button>
+      <button class="rm-tab" data-tab="discussions" onclick="loadRepoTab('discussions')">Discussions</button>
+      <button class="rm-tab" data-tab="wiki" onclick="loadRepoTab('wiki')">Wiki</button>
+    </div>
+    <div class="rm-content" id="rm-content">
+      </div>
+  </div>
+</div>
+
+<div class="app">
+
+  <div id="sb">
+
+    <div class="sb-sec">
+      <div class="sb-title">
+        <span>🔍 Search</span>
+      </div>
+      <input class="inp sb-search" id="search-inp" type="text" placeholder="name, description, topic…" oninput="applyFilters()">
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title">
+        <span>⬡ Languages</span>
+        <span class="sb-clear" onclick="clearFilter('lang')">clear</span>
+      </div>
+      <input class="inp sb-search" id="lang-search" type="text" placeholder="filter languages…" oninput="filterSbList('lang')">
+      <div class="fl-list" id="lang-list"></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title">
+        <span>🖥 Platforms</span>
+        <span class="sb-clear" onclick="clearFilter('plat')">clear</span>
+      </div>
+      <div class="fl-list" id="plat-list"></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title">
+        <span>⚙ Architecture</span>
+        <span class="sb-clear" onclick="clearFilter('arch2')">clear</span>
+      </div>
+      <div class="fl-list" id="arch2-list"></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title">
+        <span>🏷 Tags</span>
+        <span class="sb-clear" onclick="clearFilter('tag')">clear</span>
+      </div>
+      <input class="inp sb-search" id="tag-search" type="text" placeholder="filter tags…" oninput="filterSbList('tag')">
+      <div class="fl-list" id="tag-list"></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title"><span>📦 Archive Status</span></div>
+      <div class="radio-grp" id="archive-grp">
+        <label class="radio-item"><input type="radio" name="arch" value="all" checked onchange="applyFilters()"> All repos</label>
+        <label class="radio-item"><input type="radio" name="arch" value="active" onchange="applyFilters()"> Active only</label>
+        <label class="radio-item"><input type="radio" name="arch" value="archived" onchange="applyFilters()"> Archived only</label>
+      </div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title"><span>⭐ Min Stars: <span id="star-range-val">0</span></span></div>
+      <input type="range" id="star-range" min="0" max="100000" value="0" step="50" oninput="document.getElementById('star-range-val').textContent=fmtNum(this.value);applyFilters()">
+      <div class="range-labels"><span>0</span><span>100k</span></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title"><span>🍴 Min Forks: <span id="fork-range-val" style="color:var(--cyan)">0</span></span></div>
+      <input type="range" id="fork-range" min="0" max="50000" value="0" step="25" oninput="document.getElementById('fork-range-val').textContent=fmtNum(this.value);applyFilters()">
+      <div class="range-labels"><span>0</span><span>50k</span></div>
+    </div>
+
+    <div class="sb-sec">
+      <div class="sb-title"><span>🗂 License</span><span class="sb-clear" onclick="clearFilter('lic')">clear</span></div>
+      <div class="fl-list" id="lic-list"></div>
+    </div>
+
+    <div style="margin-top:10px;">
+      <button class="btn btn-mag" style="width:100%;font-size:.65rem;" onclick="clearAllFilters()">CLEAR ALL FILTERS</button>
+    </div>
+
+  </div><div id="main">
+
+  <div id="top-rail">
+
+    <div id="sortbar">
+      <span class="sort-lbl">Sort:</span>
+      <select id="sort-sel" onchange="applyFilters()">
+        <option value="stars">⭐ Stars</option>
+        <option value="forks">🍴 Forks</option>
+        <option value="updated">🕐 Last Updated</option>
+        <option value="pushed">📤 Last Push</option>
+        <option value="name-az">🔤 Name A→Z</option>
+        <option value="name-za">🔤 Name Z→A</option>
+        <option value="size">📦 Repo Size</option>
+        <option value="created">📅 Date Created</option>
+        <option value="watchers">👁 Watchers</option>
+        <option value="open-issues">🐛 Open Issues</option>
+      </select>
+      <button id="dir-btn" onclick="toggleDir()" title="Toggle sort direction">↓</button>
+      <div class="sort-spacer"></div>
+      <span class="sort-lbl">View:</span>
+      <div class="view-tog">
+        <button class="vbtn on" id="vgrid" onclick="setView('grid')">⊞</button>
+        <button class="vbtn" id="vlist" onclick="setView('list')">≡</button>
+      </div>
+    </div>
+
+    <div id="statsbar">
+      <span class="sbar-item">Showing <b id="showing-cnt">0</b> of <em id="total-cnt">0</em> repos</span>
+      <span class="sbar-item">⭐ <b id="total-stars">0</b> stars</span>
+      <span class="sbar-item">🍴 <b id="total-forks">0</b> forks</span>
+      <span class="sbar-item" id="arch-stat" style="display:none">📦 <b id="archived-cnt">0</b> archived</span>
+      <span id="cache-badge">LOADING</span>
+    </div>
+
+    </div><div id="repos-wrap">
+      <div class="repos-grid" id="repos-container"></div>
+    </div>
+
+  </div></div><script>
+'use strict';
+
+/* ═══════════════════════════════════════════
+   CONSTANTS & CONFIG
+═══════════════════════════════════════════ */
+const CACHE_KEY = 'starmap_cache_v4'; 
+const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
+const API_BASE  = 'https://api.github.com';
+
+const LANG_COLORS = {
+  JavaScript:'#f1e05a',TypeScript:'#3178c6',Python:'#3572A5',Rust:'#dea584',
+  Go:'#00ADD8',C:'#555555','C++':'#f34b7d','C#':'#178600',Java:'#b07219',
+  Kotlin:'#A97BFF',Swift:'#F05138',Dart:'#00B4AB',Ruby:'#701516',PHP:'#4F5D95',
+  Shell:'#89e051',Bash:'#89e051',Lua:'#000080','Vim script':'#199f4b',
+  'Vim Script':'#199f4b',HTML:'#e34c26',CSS:'#563d7c',SCSS:'#c6538c',
+  Vue:'#41b883',Svelte:'#ff3e00',Nix:'#7e7eff',Haskell:'#5e5086',
+  Elixir:'#6e4a7e',Clojure:'#db5855',Perl:'#0298c3',R:'#198CE7',
+  MATLAB:'#e16737',PowerShell:'#012456',Batchfile:'#C1F12E',Makefile:'#427819',
+  Dockerfile:'#384d54',HCL:'#844FBA',Assembly:'#6E4C13',GLSL:'#5686a5',
+  HLSL:'#aace60','Jupyter Notebook':'#DA5B0B',Zig:'#ec915c',OCaml:'#3be133',
+  Scala:'#c22d40',Groovy:'#e69f56',CoffeeScript:'#244776',ActionScript:'#882B0F',
+  Fortran:'#4d41b1',VHDL:'#adb2cb',Verilog:'#b2b7f8',Awk:'#c30e9b',
+  'Common Lisp':'#3fb68b',Scheme:'#1e4aec',Nim:'#ffc200',Crystal:'#000100',
+  Odin:'#60AFFE',D:'#ba595e',Racket:'#3c5caa',Tcl:'#e4cc98',
+};
+
+const PLATFORM_LABELS = {
+  linux:'Linux', windows:'Windows', macos:'macOS', android:'Android', ios:'iOS', bsd:'BSD',
+};
+
+/* ═══════════════════════════════════════════
+   STATE
+═══════════════════════════════════════════ */
+let allRepos         = [];
+let filtered         = [];
+let sortDir          = -1; // -1 desc, 1 asc
+let currentView      = 'grid';
+let currentModalRepo = '';
+
+let activeTagFilter  = new Map();
+let activeLangFilter = new Map();
+let activeLicFilter  = new Map();
+let activeArchFilter = new Map(); 
+let activePlatFilter = new Map();
+
+/* ═══════════════════════════════════════════
+   TOKEN MANAGEMENT
+═══════════════════════════════════════════ */
+function openTokenModal() {
+  document.getElementById('gh-token-inp').value = localStorage.getItem('starmap_gh_token') || '';
+  document.getElementById('token-overlay').classList.add('show');
+}
+function closeTokenModal() {
+  document.getElementById('token-overlay').classList.remove('show');
+}
+function saveToken() {
+  const val = document.getElementById('gh-token-inp').value.trim();
+  if (val) {
+    localStorage.setItem('starmap_gh_token', val);
+    updateKeyIcon(true);
+  } else {
+    clearToken();
+  }
+  closeTokenModal();
+}
+function clearToken() {
+  localStorage.removeItem('starmap_gh_token');
+  document.getElementById('gh-token-inp').value = '';
+  updateKeyIcon(false);
+  closeTokenModal();
+}
+function updateKeyIcon(hasToken) {
+  const btn = document.getElementById('key-btn');
+  if (hasToken) {
+    btn.style.borderColor = 'var(--grn)';
+    btn.style.color = 'var(--grn)';
+  } else {
+    btn.style.borderColor = 'var(--borderB)';
+    btn.style.color = 'var(--textD)';
+  }
+}
+
+// Universal API Fetcher that attaches the token if available
+async function githubApiFetch(path, acceptHeader = 'application/vnd.github.v3+json') {
+  const headers = { 'Accept': acceptHeader };
+  const token = localStorage.getItem('starmap_gh_token');
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  return fetch(API_BASE + path, { headers });
+}
+
+// Calculate Black/White contrast for Github Issue Tags
+function getContrastYIQ(hexcolor){
+  if (!hexcolor) return '#fff';
+  hexcolor = hexcolor.replace("#", "");
+  if(hexcolor.length === 3) hexcolor = hexcolor.split('').map(c => c+c).join('');
+  const r = parseInt(hexcolor.substr(0,2),16);
+  const g = parseInt(hexcolor.substr(2,2),16);
+  const b = parseInt(hexcolor.substr(4,2),16);
+  const yiq = ((r*299)+(g*587)+(b*114))/1000;
+  return (yiq >= 128) ? '#000' : '#fff';
+}
+
+/* ═══════════════════════════════════════════
+   REPO DEEP DIVE MODAL LOGIC
+═══════════════════════════════════════════ */
+function openRepoModal(fullName, tab = 'readme') {
+  currentModalRepo = fullName;
+  const parts = fullName.split('/');
+  document.getElementById('rm-title').innerHTML = `${esc(parts[0])} / <span>${esc(parts[1])}</span>`;
+  document.getElementById('repo-modal-overlay').classList.add('show');
+  
+  // Prevent background scrolling while modal is open
+  document.body.style.overflow = 'hidden';
+  
+  loadRepoTab(tab);
+}
+
+function closeRepoModal() {
+  document.getElementById('repo-modal-overlay').classList.remove('show');
+  document.getElementById('rm-content').innerHTML = '';
+  document.body.style.overflow = '';
+}
+
+async function loadRepoTab(tab) {
+  // Update active styling
+  document.querySelectorAll('.rm-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.rm-tab[data-tab="${tab}"]`).classList.add('active');
+
+  const content = document.getElementById('rm-content');
+  content.innerHTML = '<div class="rm-loading">Fetching live data from GitHub...</div>';
+
+  try {
+    if (tab === 'readme') {
+      const res = await githubApiFetch(`/repos/${currentModalRepo}/readme`, 'application/vnd.github.html');
+      if (res.status === 404) throw new Error('No README found for this repository.');
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
+      
+      const html = await res.text();
+      content.innerHTML = `<div class="markdown-body">${html}</div>`;
+      
+    } else if (tab === 'issues') {
+      const res = await githubApiFetch(`/repos/${currentModalRepo}/issues?state=open&per_page=50`);
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
+      
+      const allIssues = await res.json();
+      // GitHub API returns PRs in the issues endpoint, we must filter them out
+      const pureIssues = allIssues.filter(i => !i.pull_request);
+      
+      if (pureIssues.length === 0) {
+        content.innerHTML = `<div class="rm-empty"><p>No open issues found.</p></div>`;
+      } else {
+        content.innerHTML = pureIssues.map(i => {
+          const labelsHtml = i.labels.map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
+          const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
+
+          return `
+          <div class="rm-issue">
+            <div class="rmi-top">
+               <div class="rmi-title-wrap">
+                  <div class="rmi-title-row">
+                     <span class="rmi-status open">Open</span>
+                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${esc(i.title)}</a></div>
+                  </div>
+                  ${labelsHtml.length > 0 ? `<div class="rmi-labels">${labelsHtml}</div>` : ''}
+               </div>
+               <div class="rmi-side">
+                  ${commentsHtml}
+                  ${assigneesHtml}
+               </div>
+            </div>
+            <div class="rmi-meta">
+               #${i.number} opened on ${new Date(i.created_at).toLocaleDateString()} by 
+               <a href="${i.user.html_url}" target="_blank">
+                 <img src="${i.user.avatar_url}" class="rmi-avatar">@${esc(i.user.login)}
+               </a>
+            </div>
+          </div>
+        `}).join('');
+      }
+
+    } else if (tab === 'prs') {
+      const res = await githubApiFetch(`/repos/${currentModalRepo}/pulls?state=open&per_page=50`);
+      if (!res.ok) throw new Error(`API Error: ${res.status}`);
+      
+      const prs = await res.json();
+      if (prs.length === 0) {
+        content.innerHTML = `<div class="rm-empty"><p>No open pull requests found.</p></div>`;
+      } else {
+        content.innerHTML = prs.map(i => {
+          const labelsHtml = i.labels.map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
+          const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
+          const isDraft = i.draft;
+          const statusClass = isDraft ? 'draft' : 'open';
+          const statusText = isDraft ? 'Draft' : 'Open';
+
+          return `
+          <div class="rm-issue">
+            <div class="rmi-top">
+               <div class="rmi-title-wrap">
+                  <div class="rmi-title-row">
+                     <span class="rmi-status ${statusClass}">${statusText}</span>
+                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${esc(i.title)}</a></div>
+                  </div>
+                  ${labelsHtml.length > 0 ? `<div class="rmi-labels">${labelsHtml}</div>` : ''}
+               </div>
+               <div class="rmi-side">
+                  ${commentsHtml}
+                  ${assigneesHtml}
+               </div>
+            </div>
+            <div class="rmi-meta">
+               #${i.number} opened on ${new Date(i.created_at).toLocaleDateString()} by 
+               <a href="${i.user.html_url}" target="_blank">
+                 <img src="${i.user.avatar_url}" class="rmi-avatar">@${esc(i.user.login)}
+               </a>
+            </div>
+          </div>
+        `}).join('');
+      }
+
+    } else if (tab === 'discussions') {
+      content.innerHTML = `
+        <div class="rm-empty">
+          <p>Discussions require GraphQL queries and cannot be reliably rendered via the standard REST API.</p>
+          <a class="abtn abtn-m" href="https://github.com/${currentModalRepo}/discussions" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Discussions on GitHub</a>
+        </div>
+      `;
+    } else if (tab === 'wiki') {
+      content.innerHTML = `
+        <div class="rm-empty">
+          <p>Wikis are stored as completely separate git repositories and cannot be fetched directly via the REST API.</p>
+          <a class="abtn abtn-m" href="https://github.com/${currentModalRepo}/wiki" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Wiki on GitHub</a>
+        </div>
+      `;
+    }
+  } catch(e) {
+    content.innerHTML = `<div class="rm-empty"><p>⚠ ${esc(e.message)}</p></div>`;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   FETCH INITIAL REPOS
+═══════════════════════════════════════════ */
+
+async function startFetch(useCache = true) {
+  const username = document.getElementById('uname-inp').value.trim();
+  if (!username) return;
+
+  if (!useCache) {
+    clearCache(username);
+  }
+
+  if (useCache) {
+    const cached = loadCache(username);
+    if (cached) {
+      if (cached.partial) {
+        showPartialWarning(username, cached);
+        return;
+      }
+      allRepos = enrichAll(cached.repos);
+      const age = msToAge(Date.now() - cached.timestamp);
+      const exp = msToAge(CACHE_TTL - (Date.now() - cached.timestamp));
+      document.getElementById('last-upd').textContent =
+        new Date(cached.timestamp).toLocaleDateString();
+      setCacheBadge('cached',
+        `CACHE · ${cached.repos.length} repos · ${age} old · refreshes in ${exp}`);
+      document.getElementById('loading').classList.add('hidden');
+      buildFilters();
+      applyFilters();
+      updateStats();
+      return;
+    }
+  }
+
+  setCacheBadge('live', 'FETCHING…');
+  showLoading('Connecting to GitHub…', 0);
+  document.getElementById('loading').classList.remove('hidden');
+
+  let page           = 1;
+  let repos          = [];
+  let wasRateLimited = false;
+  let wasError       = false;
+  let errorMsg       = '';
+
+  outer: while (true) {
+    try {
+      setLoading(
+        `Fetching page ${page}… (${repos.length} repos so far)`,
+        Math.min(93, (repos.length / 30))
+      );
+
+      const res = await githubApiFetch(`/users/${username}/starred?per_page=100&page=${page}`);
+
+      if (res.status === 403 || res.status === 429) {
+        const reset = res.headers.get('X-RateLimit-Reset');
+        const wait  = reset
+          ? `Reset at ${new Date(reset * 1000).toLocaleTimeString()}`
+          : 'Try again in ~60s';
+        const token = localStorage.getItem('starmap_gh_token');
+        errorMsg = `Rate limited (${repos.length} repos). ${!token ? 'Click 🔑 to add an API Token!' : wait}`;
+        wasRateLimited = true;
+        break outer;
+      }
+
+      if (!res.ok) {
+        errorMsg = `HTTP ${res.status} on page ${page}`;
+        wasError = true;
+        break outer;
+      }
+
+      const data = await res.json();
+      if (!Array.isArray(data) || data.length === 0) break outer; 
+
+      repos = repos.concat(data);
+      if (data.length < 100) break outer; 
+
+      page++;
+      await sleep(130); 
+    } catch (e) {
+      errorMsg = `Network error: ${e.message}`;
+      wasError = true;
+      break outer;
+    }
+  }
+
+  const incomplete = wasRateLimited || wasError;
+
+  if (repos.length === 0) {
+    setLoading(`⚠ ${errorMsg || 'No data received.'}`, 100);
+    await sleep(2500);
+    document.getElementById('loading').classList.add('hidden');
+    setCacheBadge('live', '⚠ FETCH FAILED');
+    return;
+  }
+
+  if (incomplete) {
+    setLoading(`⚠ ${errorMsg}`, 100);
+    await sleep(2500);
+    saveCache(username, repos, true);
+    allRepos = enrichAll(repos);
+    document.getElementById('last-upd').textContent = new Date().toLocaleDateString();
+    setCacheBadge('live',
+      `⚠ PARTIAL · ${repos.length} repos · ${errorMsg}`);
+    document.getElementById('loading').classList.add('hidden');
+    buildFilters();
+    applyFilters();
+    updateStats();
+    return;
+  }
+
+  setLoading(`Processing ${repos.length} repos…`, 97);
+  await sleep(40);
+
+  saveCache(username, repos, false);
+  allRepos = enrichAll(repos);
+  const exp = msToAge(CACHE_TTL);
+  document.getElementById('last-upd').textContent = new Date().toLocaleDateString();
+  setCacheBadge('cached',
+    `LIVE · ${repos.length} repos cached · refreshes in ${exp}`);
+  document.getElementById('loading').classList.add('hidden');
+  buildFilters();
+  applyFilters();
+  updateStats();
+}
+
+function showPartialWarning(username, cached) {
+  document.getElementById('loading').classList.add('hidden');
+
+  if (allRepos.length === 0 && cached.repos.length > 0) {
+    allRepos = enrichAll(cached.repos);
+    buildFilters();
+    applyFilters();
+    updateStats();
+  }
+
+  const age = msToAge(Date.now() - cached.timestamp);
+  setCacheBadge('live',
+    `⚠ PARTIAL CACHE · ${cached.repos.length} repos · ${age} old`);
+
+  let banner = document.getElementById('partial-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'partial-banner';
+    banner.style.cssText = `
+      position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:300;
+      background:#0c0c1c;border:1px solid rgba(255,214,0,.55);color:#ffd600;
+      font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:10px 18px;
+      display:flex;align-items:center;gap:14px;box-shadow:0 0 22px rgba(255,214,0,.18);
+      max-width:90vw;
+    `;
+    document.body.appendChild(banner);
+  }
+  banner.innerHTML = `
+    <span>⚠ Stored cache is <b>partial</b> (${cached.repos.length} repos, ${age} old) — likely from a previous rate-limit.</span>
+    <button onclick="startFetch(false)" style="
+      background:transparent;border:1px solid #ffd600;color:#ffd600;
+      font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:4px 10px;cursor:pointer;white-space:nowrap;
+    ">↺ Re-fetch now</button>
+    <button onclick="useCachedPartial()" style="
+      background:transparent;border:1px solid #505060;color:#707090;
+      font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:4px 10px;cursor:pointer;white-space:nowrap;
+    ">Use partial anyway</button>
+    <button onclick="dismissBanner()" style="
+      background:transparent;border:none;color:#505060;font-size:.9rem;cursor:pointer;padding:0 2px;
+    ">✕</button>
+  `;
+}
+
+function useCachedPartial() {
+  dismissBanner();
+  const username = document.getElementById('uname-inp').value.trim();
+  const cached   = loadCache(username);
+  if (!cached) return;
+  allRepos = enrichAll(cached.repos);
+  const age = msToAge(Date.now() - cached.timestamp);
+  setCacheBadge('live', `⚠ PARTIAL · ${cached.repos.length} repos · ${age} old`);
+  buildFilters(); applyFilters(); updateStats();
+}
+
+function dismissBanner() {
+  const b = document.getElementById('partial-banner');
+  if (b) b.remove();
+}
+
+function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+function showLoading(msg, pct){
+  document.getElementById('loading').classList.remove('hidden');
+  setLoading(msg, pct);
+}
+
+function setLoading(msg, pct){
+  document.getElementById('ld-status').textContent = msg;
+  document.getElementById('ld-fill').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════
+   CACHE
+═══════════════════════════════════════════ */
+function cacheKey(username){ return CACHE_KEY + '_' + username; }
+
+function slimRepo(r) {
+  return {
+    id:               r.id,
+    name:             r.name,
+    full_name:        r.full_name,
+    description:      r.description,
+    html_url:         r.html_url,
+    clone_url:        r.clone_url,
+    homepage:         r.homepage || '',
+    language:         r.language,
+    topics:           r.topics || [],
+    stargazers_count: r.stargazers_count || 0,
+    forks_count:      r.forks_count      || 0,
+    open_issues_count:r.open_issues_count|| 0,
+    watchers_count:   r.watchers_count   || 0,
+    size:             r.size             || 0,
+    pushed_at:        r.pushed_at,
+    updated_at:       r.updated_at,
+    created_at:       r.created_at,
+    archived:         r.archived  || false,
+    fork:             r.fork      || false,
+    is_template:      r.is_template || false,
+    license:          r.license ? { spdx_id: r.license.spdx_id } : null,
+    owner:            r.owner    ? { login:   r.owner.login    } : null,
+    parent:           r.parent   ? { full_name: r.parent.full_name, id: r.parent.id } : null,
+    source:           r.source   ? { full_name: r.source.full_name, id: r.source.id } : null,
+  };
+}
+
+function saveCache(username, repos, partial = false){
+  const slim    = repos.map(slimRepo);
+  const payload = JSON.stringify({
+    repos: slim,
+    timestamp: Date.now(),
+    username,
+    partial,
+    count: slim.length,
+  });
+
+  const KB = Math.round(payload.length / 1024);
+  console.log(`[cache] storing ${slim.length} repos, ~${KB} KB`);
+
+  try {
+    localStorage.setItem(cacheKey(username), payload);
+    return true;
+  } catch(e) {
+    pruneOldCacheKeys();
+    try {
+      localStorage.setItem(cacheKey(username), payload);
+      return true;
+    } catch(e2) {
+      console.warn('[cache] save failed even after pruning:', e2.message,
+        `payload size: ${KB} KB`);
+      return false;
+    }
+  }
+}
+
+function loadCache(username){
+  try {
+    const raw = localStorage.getItem(cacheKey(username));
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    if (Date.now() - obj.timestamp > CACHE_TTL) {
+      localStorage.removeItem(cacheKey(username));
+      return null;
+    }
+    return obj;
+  } catch(e) { return null; }
+}
+
+function clearCache(username){
+  try { localStorage.removeItem(cacheKey(username)); } catch(e) {}
+}
+
+function pruneOldCacheKeys(){
+  try {
+    const repoPrefixes = ['starmap_cache_v1_','starmap_cache_v2_','starmap_cache_v3_','starmap_cache_v4_'];
+    Object.keys(localStorage).forEach(k => {
+      try {
+        if (repoPrefixes.some(p => k.startsWith(p))) {
+          const obj = JSON.parse(localStorage.getItem(k));
+          if (!obj.timestamp || Date.now() - obj.timestamp > CACHE_TTL)
+            localStorage.removeItem(k);
+          return;
+        }
+      } catch(e) { localStorage.removeItem(k); }
+    });
+  } catch(e) {}
+}
+
+/* ─────── ARCHITECTURE LABELS ─────── */
+const ARCH_LABELS = {
+  'x86':      'x86 (32-bit)',
+  'x86_64':   'x86_64 (amd64)',
+  'arm32':    'ARM 32-bit',
+  'arm64':    'ARM 64-bit',
+  'riscv':    'RISC-V',
+  'mips':     'MIPS',
+  'ppc':      'PowerPC',
+  'wasm':     'WebAssembly',
+  'universal':'Universal',
+};
+
+/* ─────── ARCHITECTURE DETECTION ─────── */
+function detectArchitectures(repo) {
+  const T = (repo.topics || []).map(t => t.toLowerCase());
+  const D = (repo.description || '').toLowerCase();
+  const N = (repo.name || '').toLowerCase();
+  const L = (repo.language || '').toLowerCase();
+  const src = D + ' ' + N + ' ' + T.join(' ');
+  const archs = new Set();
+
+  const hasTopic = (...ts) => ts.some(t => T.includes(t));
+
+  if (hasTopic('x86','i386','i686','ia32','win32') || /\b(x86|i386|i686|ia32|win32)\b/.test(src)) archs.add('x86');
+  if (hasTopic('x86-64','x86_64','amd64','x64') || /\b(x86[_-]64|amd64|x64)\b/.test(src)) archs.add('x86_64');
+  if (hasTopic('arm64','aarch64','arm64-v8a','armv8') || /\b(arm64|aarch64|arm64[_-]v8a|armv8[_-]?a?)\b/.test(src)) archs.add('arm64');
+  if (hasTopic('armv7','armv6','arm32','armeabi','armeabi-v7a','armhf') || /\b(armv7[a-z]*|armv6[a-z]*|arm32|armhf|armeabi[_-]v7a|armeabi(?!-v8))\b/.test(src)) archs.add('arm32');
+  else if (hasTopic('arm') || /\barm\b/.test(src)) {
+    archs.add('arm32'); archs.add('arm64');
+  }
+  
+  if (hasTopic('riscv','riscv64','riscv32','risc-v') || /\b(riscv|risc[_-]v|rv32|rv64)\b/.test(src)) archs.add('riscv');
+  if (hasTopic('mips','mips64','mipsel') || /\b(mips(el|64|32)?)\b/.test(src)) archs.add('mips');
+  if (hasTopic('powerpc','ppc','ppc64','ppc64le') || /\b(powerpc|ppc64(le)?|ppc)\b/.test(src)) archs.add('ppc');
+  if (hasTopic('wasm','webassembly','emscripten') || /\b(webassembly|wasm|emscripten)\b/.test(src) || L === 'webassembly') archs.add('wasm');
+
+  if (hasTopic('cross-platform','multiplatform','multi-arch','universal') || /\b(cross.platform|multi.arch|universal binary|fat binary|multiple architectures|all platforms)\b/.test(src)) {
+    archs.add('universal');
+  }
+
+  const interpretedLangs = [
+    'python','javascript','typescript','ruby','lua','shell','bash','perl','r',
+    'elixir','clojure','racket','scheme','groovy','coffeescript','julia',
+    'java','kotlin','scala','dart','nix','vim script','vim snippet','emacs lisp'
+  ];
+
+  if (interpretedLangs.includes(L) && archs.size === 0) {
+    archs.add('universal');
+  }
+
+  const compiledLangs = ['c','c++','rust','go','zig','nim','crystal','d','fortran','assembly','objective-c','swift','c#','f#'];
+  if (archs.size === 0 && !compiledLangs.includes(L)) {
+      if (!/\b(cmake|make install|cargo build|go build|docker build|exe|msi|appimage|dmg|deb|rpm|apk)\b/.test(src)) {
+          archs.add('universal');
+      }
+  }
+
+  return [...archs];
+}
+
+/* ─────── PLATFORM DETECTION ─────── */
+function detectPlatforms(repo) {
+  const T = (repo.topics || []).map(t => t.toLowerCase());
+  const D = (repo.description || '').toLowerCase();
+  const N = (repo.name || '').toLowerCase();
+  const src = D + ' ' + N + ' ' + T.join(' ');
+  const plats = new Set();
+
+  if (/\b(windows|win32|win64|\.exe|\.msi|winget|chocolatey|wpf|winforms)\b/.test(src)) plats.add('windows');
+  
+  if (/\b(macos|mac os x?|osx|darwin|\.dmg|\.pkg|homebrew|brew install|apple silicon)\b/.test(src)) plats.add('macos');
+  
+  if (/\b(linux|ubuntu|debian|archlinux|arch linux|fedora|\.deb|\.rpm|\.appimage|flatpak|snapcraft|snap install|aur)\b/.test(src)) plats.add('linux');
+  
+  if (/\b(android|\.apk|f-droid|termux)\b/.test(src)) plats.add('android');
+  
+  if (/\b(ios|iphone|ipad|app store)\b/.test(src)) plats.add('ios');
+
+  if (/\b(electron|tauri|flutter|react native|multiplatform|cross-platform)\b/.test(src)) {
+    if (/\b(electron|tauri)\b/.test(src)) {
+      plats.add('windows'); plats.add('linux'); plats.add('macos');
+    }
+  }
+
+  return [...plats];
+}
+
+/* ═══════════════════════════════════════════
+   DATA ENRICHMENT
+═══════════════════════════════════════════ */
+const KNOWN_REPOS = (() => {
+  const A_ALL    = ['x86_64','arm64','arm32'];
+  const A_X64ARM = ['x86_64','arm64'];
+  const A_X64    = ['x86_64'];
+  const A_UNI    = ['universal'];
+
+  const db = {
+    'alacritty/alacritty':         { archs:A_X64ARM },
+    'kovidgoyal/kitty':            { archs:A_X64ARM },
+    'wez/wezterm':                 { archs:A_X64ARM },
+    'ghostty-org/ghostty':         { archs:A_X64ARM },
+    'mitchellh/ghostty':           { archs:A_X64ARM },
+    'foot-terminal/foot':          { archs:A_X64ARM },
+    'contour-terminal/contour':    { archs:A_X64ARM },
+    'rio-terminal/rio':            { archs:A_X64ARM },
+    'sedwards/seq66':              { archs:A_X64 },
+    'tmux/tmux':                   { archs:A_X64ARM },
+    'zellij-org/zellij':           { archs:A_X64ARM },
+    'nicm/tmux':                   { archs:A_X64ARM },
+    'fish-shell/fish-shell':       { archs:A_X64ARM },
+    'zsh-users/zsh':               { archs:A_X64ARM },
+    'nushell/nushell':             { archs:A_X64ARM },
+    'elves/elvish':                { archs:A_X64ARM },
+    'ohmyzsh/ohmyzsh':             { archs:A_UNI },
+    'romkatv/powerlevel10k':       { archs:A_UNI },
+    'starship/starship':           { archs:A_X64ARM },
+    'sindresorhus/pure':           { archs:A_UNI },
+    'zap-zsh/zap':                 { archs:A_UNI },
+    'zplug/zplug':                 { archs:A_UNI },
+    'neovim/neovim':               { archs:A_X64ARM },
+    'vim/vim':                     { archs:A_X64ARM },
+    'helix-editor/helix':          { archs:A_X64ARM },
+    'lapce/lapce':                 { archs:A_X64ARM },
+    'zed-industries/zed':          { archs:A_X64ARM },
+    'emacs-mirror/emacs':          { archs:A_X64ARM },
+    'kakoune/kakoune':             { archs:A_X64ARM },
+    'mawww/kakoune':               { archs:A_X64ARM },
+    'micro-editor/micro':          { archs:A_ALL    },
+    'xi-editor/xi-editor':         { archs:A_X64ARM },
+    'nvchad/nvchad':               { archs:A_UNI },
+    'lazyvim/lazyvim':             { archs:A_UNI },
+    'ayamir/nvimdots':             { archs:A_UNI },
+    'astronvim/astronvim':         { archs:A_UNI },
+    'lunarvim/lunarvim':           { archs:A_UNI },
+    'folke/lazy.nvim':             { archs:A_UNI },
+    'folke/tokyonight.nvim':       { archs:A_UNI },
+    'nvim-telescope/telescope.nvim': { archs:A_UNI },
+    'nvim-treesitter/nvim-treesitter': { archs:A_UNI },
+    'neovim/nvim-lspconfig':       { archs:A_UNI },
+    'hrsh7th/nvim-cmp':            { archs:A_UNI },
+    'williamboman/mason.nvim':     { archs:A_UNI },
+    'nvim-lualine/lualine.nvim':   { archs:A_UNI },
+    'catppuccin/nvim':             { archs:A_UNI },
+    'lewis6991/gitsigns.nvim':     { archs:A_UNI },
+    'akinsho/bufferline.nvim':     { archs:A_UNI },
+    'kyazdani42/nvim-tree.lua':    { archs:A_UNI },
+    'hyprwm/hyprland':             { archs:A_X64ARM },
+    'swaywm/sway':                 { archs:A_X64ARM },
+    'i3/i3':                       { archs:A_X64ARM },
+    'baskerville/xmobar':          { archs:A_X64    },
+    'polybar/polybar':             { archs:A_X64ARM },
+    'elkowar/eww':                 { archs:A_X64ARM },
+    'Alexays/Waybar':              { archs:A_X64ARM },
+    'dunst-project/dunst':         { archs:A_X64ARM },
+    'emersion/mako':               { archs:A_X64ARM },
+    'Mottie/rofi':                 { archs:A_X64ARM },
+    'davatorium/rofi':             { archs:A_X64ARM },
+    'lbonn/rofi':                  { archs:A_X64ARM },
+    'baskerville/bspwm':           { archs:A_X64    },
+    'qtile/qtile':                 { archs:A_X64ARM },
+    'leftwm/leftwm':               { archs:A_X64ARM },
+    'riverwm/river':               { archs:A_X64ARM },
+    'nwg-piotr/nwg-shell':         { archs:A_X64ARM },
+    'swaylock-effects/swaylock':   { archs:A_X64ARM },
+    'nicowillis/swaylock-effects': { archs:A_X64ARM },
+    'ranger/ranger':               { archs:A_UNI    },
+    'sxyazi/yazi':                 { archs:A_X64ARM },
+    'jarun/nnn':                   { archs:A_X64ARM },
+    'gokcehan/lf':                 { archs:A_ALL    },
+    'vifm/vifm':                   { archs:A_X64ARM },
+    'nicowillis/felix':            { archs:A_X64ARM },
+    'nicowillis/midnight-commander':{ archs:A_X64ARM },
+    'MidnightCommander/mc':        { archs:A_X64ARM },
+    'htop-dev/htop':               { archs:A_X64ARM },
+    'aristocratos/btop':           { archs:A_X64ARM },
+    'nicolargo/glances':           { archs:A_X64ARM },
+    'aksakalli/gtop':              { archs:A_X64ARM },
+    'bvaisvil/zenith':             { archs:A_X64ARM },
+    'ClementTsang/bottom':         { archs:A_ALL    },
+    'muesli/cava':                 { archs:A_X64ARM },
+    'karlstav/cava':               { archs:A_X64ARM },
+    'junegunn/fzf':                { archs:A_X64ARM },
+    'ajeetdsouza/zoxide':          { archs:A_X64ARM },
+    'sharkdp/fd':                  { archs:A_X64ARM },
+    'burntsushi/ripgrep':          { archs:A_X64ARM },
+    'phiresky/ripgrep-all':        { archs:A_X64ARM },
+    'mptre/yank':                  { archs:A_X64ARM },
+    'eza-community/eza':           { archs:A_X64ARM },
+    'ogham/exa':                   { archs:A_X64ARM },
+    'lsd-rs/lsd':                  { archs:A_X64ARM },
+    'sharkdp/bat':                 { archs:A_X64ARM },
+    'junegunn/bat':                { archs:A_X64ARM },
+    'chmln/sd':                    { archs:A_X64ARM },
+    'sift-binary/sift':            { archs:A_X64ARM },
+    'ggreer/the_silver_searcher':  { archs:A_X64ARM },
+    'extrawurst/gitui':            { archs:A_X64ARM },
+    'jesseduffield/lazygit':       { archs:A_X64ARM },
+    'github/gitignore':            { archs:[] },
+    'so-fancy/diff-so-fancy':      { archs:A_UNI    },
+    'dandavison/delta':            { archs:A_X64ARM },
+    'charmbracelet/soft-serve':    { archs:A_X64ARM },
+    'nicowillis/onefetch':         { archs:A_X64ARM },
+    'o2sh/onefetch':               { archs:A_X64ARM },
+    'nicowillis/paru':             { archs:A_X64ARM },
+    'morganamilo/paru':            { archs:A_X64ARM },
+    'jguer/yay':                   { archs:A_X64ARM },
+    'nicowillis/pikaur':           { archs:A_X64ARM },
+    'nix-community/home-manager':  { archs:A_X64ARM },
+    'NixOS/nixpkgs':               { archs:A_UNI },
+    'nix-community/nix-index':     { archs:A_X64ARM },
+    'nicowillis/flatpak':          { archs:A_X64ARM },
+    'flatpak/flatpak':             { archs:A_X64ARM },
+    'ryanoasis/nerd-fonts':        { archs:A_UNI },
+    'tonsky/firacode':             { archs:A_UNI },
+    'belluzj/fantasque-sans-mono': { archs:A_UNI },
+    'microsoft/cascadia-code':     { archs:A_UNI    },
+    'jdKotlinHello/jetbrains-mono':{ archs:A_UNI },
+    'JetBrains/JetBrainsMono':     { archs:A_UNI    },
+    'be5invis/iosevka':            { archs:A_UNI    },
+    'googlefonts/noto-fonts':      { archs:A_UNI },
+    'googlefonts/roboto':          { archs:A_UNI },
+    'source-foundry/hack':         { archs:A_UNI    },
+    'nicowillis/victor-mono':      { archs:A_UNI },
+    'rubjo/victor-mono':           { archs:A_UNI    },
+    'catppuccin/catppuccin':       { archs:A_UNI },
+    'folke/tokyonight.nvim':       { archs:A_UNI },
+    'rose-pine/neovim':            { archs:A_UNI },
+    'ellisonleao/gruvbox.nvim':    { archs:A_UNI },
+    'sainnhe/gruvbox-material':    { archs:A_UNI },
+    'joshdick/onedark.vim':        { archs:A_UNI },
+    'sonph/onehalf':               { archs:A_UNI },
+    'arcticicestudio/nord-vim':    { archs:A_UNI },
+    'drewtempelmeyer/palenight.vim': { archs:A_UNI },
+    'nicowillis/neofetch':         { archs:A_UNI    },
+    'dylanaraps/neofetch':         { archs:A_UNI    },
+    'chick2d/neofetch':            { archs:A_UNI },
+    'nicowillis/fastfetch':        { archs:A_X64ARM },
+    'fastfetch-cli/fastfetch':     { archs:A_X64ARM },
+    'unixorn/screenfetch':         { archs:A_UNI    },
+    'nicowillis/hyfetch':          { archs:A_UNI    },
+    'hykilpikonna/hyfetch':        { archs:A_UNI    },
+    'obsidianmd/obsidian-releases':{ archs:A_X64ARM },
+    'joplin/joplin':               { archs:A_X64ARM },
+    'marktext/marktext':           { archs:A_X64ARM },
+    'standardnotes/app':           { archs:A_X64ARM },
+    'nicowillis/logseq':           { archs:A_X64ARM },
+    'logseq/logseq':               { archs:A_X64ARM },
+    'nicowillis/appflowy':         { archs:A_X64ARM },
+    'appflowy-io/appflowy':        { archs:A_X64ARM },
+    'zen-browser/zen-browser':     { archs:A_X64ARM },
+    'mozilla/firefox':             { archs:A_X64ARM },
+    'brave/brave-browser':         { archs:A_X64ARM },
+    'nicowillis/vivaldi':          { archs:A_X64ARM },
+    'nicowillis/librewolf':        { archs:A_X64ARM },
+    'bitwarden/clients':           { archs:A_X64ARM },
+    'keepassxreboot/keepassxc':    { archs:A_X64ARM },
+    'buttercup/buttercup-desktop': { archs:A_X64ARM },
+    'nicowillis/bitwarden':        { archs:A_X64ARM },
+    'nicowillis/pass':             { archs:A_UNI    },
+    'zx2c4/password-store':        { archs:A_UNI    },
+    'nicowillis/gopass':           { archs:A_X64ARM },
+    'gopasspw/gopass':             { archs:A_X64ARM },
+    'nicowillis/nsxiv':            { archs:A_X64ARM },
+    'nicowillis/sxiv':             { archs:A_X64ARM },
+    'nicowillis/feh':              { archs:A_X64ARM },
+    'derf/feh':                    { archs:A_X64ARM },
+    'nicowillis/imv':              { archs:A_X64ARM },
+    'nicowillis/vimiv-qt':         { archs:A_X64ARM },
+    'karlch/vimiv-qt':             { archs:A_X64ARM },
+    'mpv-player/mpv':              { archs:A_X64ARM },
+    'nicowillis/vlc':              { archs:A_X64ARM },
+    'vlc-mediaplayer/vlc':         { archs:A_X64ARM },
+    'cmus/cmus':                   { archs:A_X64ARM },
+    'nicowillis/moc':              { archs:A_X64ARM },
+    'nicowillis/musikcube':        { archs:A_X64ARM },
+    'clangen/musikcube':           { archs:A_X64ARM },
+    'nicowillis/curl':             { archs:A_X64ARM },
+    'curl/curl':                   { archs:A_X64ARM },
+    'httpie/cli':                  { archs:A_UNI    },
+    'nicowillis/httpie':           { archs:A_UNI    },
+    'nicowillis/hurl':             { archs:A_X64ARM },
+    'orange-lang/hurl':            { archs:A_X64ARM },
+    'nicowillis/xh':               { archs:A_X64ARM },
+    'ducaale/xh':                  { archs:A_X64ARM },
+    'nicowillis/nmap':             { archs:A_X64ARM },
+    'nmap/nmap':                   { archs:A_X64ARM },
+    'nicowillis/gping':            { archs:A_X64ARM },
+    'orf/gping':                   { archs:A_X64ARM },
+    'nicowillis/bandwhich':        { archs:A_X64ARM },
+    'imsnif/bandwhich':            { archs:A_X64ARM },
+    'nicowillis/wireguard':        { archs:A_X64ARM },
+    'nicowillis/tailscale':        { archs:A_X64ARM },
+    'tailscale/tailscale':         { archs:A_X64ARM },
+    'nicowillis/tldr':             { archs:A_UNI    },
+    'tldr-pages/tldr':             { archs:A_UNI    },
+    'nicowillis/jq':               { archs:A_X64ARM },
+    'jqlang/jq':                   { archs:A_X64ARM },
+    'nicowillis/yq':               { archs:A_X64ARM },
+    'mikefarah/yq':                { archs:A_X64ARM },
+    'nicowillis/gdu':              { archs:A_X64ARM },
+    'dundee/gdu':                  { archs:A_X64ARM },
+    'nicowillis/dust':             { archs:A_X64ARM },
+    'bootandy/dust':               { archs:A_X64ARM },
+    'muesli/duf':                  { archs:A_X64ARM },
+    'nicowillis/procs':            { archs:A_X64ARM },
+    'dalance/procs':               { archs:A_X64ARM },
+    'nicowillis/tokei':            { archs:A_X64ARM },
+    'xampprocky/tokei':            { archs:A_X64ARM },
+    'nicowillis/choose':           { archs:A_X64ARM },
+    'theryangeary/choose':         { archs:A_X64ARM },
+    'nicowillis/vivid':            { archs:A_X64ARM },
+    'sharkdp/vivid':               { archs:A_X64ARM },
+    'nicowillis/hyperfine':        { archs:A_X64ARM },
+    'sharkdp/hyperfine':           { archs:A_X64ARM },
+    'sharkdp/insect':              { archs:A_UNI    },
+    'nicowillis/docker':           { archs:A_X64ARM },
+    'nicowillis/podman':           { archs:A_X64ARM },
+    'containers/podman':           { archs:A_X64ARM },
+    'nicowillis/lazydocker':       { archs:A_X64ARM },
+    'jesseduffield/lazydocker':    { archs:A_X64ARM },
+    'nicowillis/dive':             { archs:A_X64ARM },
+    'wagoodman/dive':              { archs:A_X64ARM },
+    'nicowillis/k9s':              { archs:A_X64ARM },
+    'derailed/k9s':                { archs:A_X64ARM },
+    'awesome-lists/awesome':       { archs:[] },
+    'sindresorhus/awesome':        { archs:[] },
+    'nicowillis/awesome-linux':    { archs:[] },
+    'nicowillis/awesome-selfhosted': { archs:[] },
+    'awesome-selfhosted/awesome-selfhosted': { archs:[] },
+    'nicowillis/awesome-dotfiles': { archs:[] },
+    'nicowillis/the-book-of-secret-knowledge': { archs:[] },
+    'trimstray/the-book-of-secret-knowledge':  { archs:[] },
+    'nicowillis/public-apis':      { archs:[] },
+    'public-apis/public-apis':     { archs:[] },
+    'nicowillis/free-for-dev':     { archs:[] },
+    'ripienaar/free-for-dev':      { archs:[] },
+    'nicowillis/build-your-own-x': { archs:[] },
+    'codecrafters-io/build-your-own-x': { archs:[] },
+    'nicowillis/dotfiles':         { archs:A_UNI },
+    'nicowillis/dotfiles-public':  { archs:A_UNI },
+    'termux/termux-app':           { archs:A_X64ARM },
+    'termux/termux-packages':      { archs:A_X64ARM },
+    'nicowillis/termux-tools':     { archs:A_X64ARM },
+    'f-droid/fdroidclient':        { archs:A_X64ARM },
+    'nicowillis/grim':             { archs:A_X64ARM },
+    'nicowillis/slurp':            { archs:A_X64ARM },
+    'nicowillis/wl-clipboard':     { archs:A_X64ARM },
+    'bugaevc/wl-clipboard':        { archs:A_X64ARM },
+    'nicowillis/xdg-desktop-portal': { archs:A_X64ARM },
+    'nicowillis/kanshi':           { archs:A_X64ARM },
+    'emersion/kanshi':             { archs:A_X64ARM },
+    'nicowillis/wayshot':          { archs:A_X64ARM },
+  };
+
+  const byName = {};
+  for (const [k,v] of Object.entries(db)) {
+    const name = k.split('/')[1];
+    if (name && !byName[name]) byName[name] = v;
+  }
+
+  return { byFullName: db, byName };
+})();
+
+function _applyKnownRepoData(repo, r) {
+  const key   = (r.full_name || '').toLowerCase();
+  const name  = (r.name || '').toLowerCase();
+  const match = KNOWN_REPOS.byFullName[key] || KNOWN_REPOS.byName[name];
+  if (!match) return;
+
+  if (match.archs?.length) {
+    const s = new Set([...(r._archs||[]),...match.archs]);
+    r._archs = [...s];
+  }
+}
+
+function enrichAll(repos){
+  return repos.map(r => {
+    r._tags        = inferTags(r);
+    r._moved       = detectMovedUrl(r);
+    r._archs       = detectArchitectures(r);
+    r._platforms   = detectPlatforms(r);
+
+    _applyKnownRepoData(r, r);
+    return r;
+  });
+}
+
+/* ─────── TAG INFERENCE ─────── */
+function inferTags(repo){
+  const tags = new Set();
+
+  if (repo.stargazers_count >= 10000) tags.add('highly-popular');
+  else if (repo.stargazers_count >= 1000) tags.add('popular');
+
+  if (repo.fork) tags.add('fork');
+  if (repo.is_template) tags.add('template');
+
+  const updatedDays = (Date.now() - new Date(repo.updated_at)) / 86400000;
+  if (!repo.archived && updatedDays < 90) tags.add('recently-updated');
+
+  const lic = (repo.license?.spdx_id || '').toLowerCase();
+  if (['mit','bsd-2-clause','bsd-3-clause','apache-2.0','isc','unlicense','cc0-1.0'].includes(lic)) tags.add('permissive-license');
+  if (['gpl-2.0','gpl-3.0','lgpl-2.1','lgpl-3.0','agpl-3.0'].includes(lic)) tags.add('copyleft-license');
+
+  return [...tags];
+}
+
+/* ─────── MOVED URL DETECTION ─────── */
+function detectMovedUrl(repo){
+  if (!repo.archived) return null;
+  const desc = (repo.description || '').toLowerCase();
+  const hp   = repo.homepage || '';
+  const movedPat = /moved?\s+to\s+(https?:\/\/[^\s,)]+)|deprecated[.,]?\s+(?:use|see)\s+(https?:\/\/[^\s,)]+)|this\s+(?:repo|project)\s+(?:has\s+)?moved\s+to\s+(https?:\/\/[^\s,)]+)/i;
+  const m = movedPat.exec(repo.description || '');
+  if (m) return m[1] || m[2] || m[3];
+  if (hp && hp !== '' && hp !== repo.html_url) return hp;
+  return null;
+}
+
+/* ═══════════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════════ */
+function buildFilters(){
+  // Preserve scroll states to stop annoying jumping when clicking filters
+  const scrollStates = {
+    lang: document.getElementById('lang-list').scrollTop,
+    tag: document.getElementById('tag-list').scrollTop,
+    lic: document.getElementById('lic-list').scrollTop,
+    arch2: document.getElementById('arch2-list').scrollTop,
+    plat: document.getElementById('plat-list').scrollTop
+  };
+
+  const langCounts  = {};
+  const platCounts  = {};
+  const tagCounts   = {};
+  const licCounts   = {};
+  const archCounts  = {};
+  let archCnt = 0;
+
+  allRepos.forEach(r => {
+    const l = r.language || '(none)';
+    langCounts[l] = (langCounts[l]||0)+1;
+    
+    (r._platforms||[]).forEach(p => { platCounts[p]=(platCounts[p]||0)+1; });
+
+    // Combine custom inferred tags and GitHub topics
+    const allT = [...new Set([...(r._tags||[]), ...(r.topics||[])])];
+    allT.forEach(t => { tagCounts[t]=(tagCounts[t]||0)+1; });
+    
+    const lic = r.license?.spdx_id || '(none)';
+    licCounts[lic] = (licCounts[lic]||0)+1;
+    if (r.archived) archCnt++;
+    (r._archs||[]).forEach(a => { archCounts[a]=(archCounts[a]||0)+1; });
+  });
+
+  buildCheckList('lang-list',  langCounts,  activeLangFilter,  'lang');
+  buildCheckList('plat-list',  platCounts,  activePlatFilter,  'plat', PLATFORM_LABELS);
+  buildCheckList('tag-list',   tagCounts,   activeTagFilter,   'tag');
+  buildCheckList('lic-list',   licCounts,   activeLicFilter,   'lic');
+  buildCheckList('arch2-list', archCounts,  activeArchFilter,  'arch2', ARCH_LABELS);
+
+  // Restore scrolls
+  document.getElementById('lang-list').scrollTop = scrollStates.lang;
+  document.getElementById('tag-list').scrollTop = scrollStates.tag;
+  document.getElementById('lic-list').scrollTop = scrollStates.lic;
+  document.getElementById('arch2-list').scrollTop = scrollStates.arch2;
+  document.getElementById('plat-list').scrollTop = scrollStates.plat;
+
+  if (archCnt > 0) document.getElementById('arch-stat').style.display='';
+  document.getElementById('archived-cnt').textContent = archCnt;
+}
+
+function buildCheckList(containerId, counts, activeMap, filterType, labelMap){
+  const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
+  const container = document.getElementById(containerId);
+  container.innerHTML = sorted.map(([val, cnt]) => {
+    const label = labelMap?.[val] || val;
+    const state = activeMap.get(val) || 0;
+    const cbClass = state === 1 ? 'cb on' : state === -1 ? 'cb exc' : 'cb';
+    const cbIcon  = state === 1 ? '✓' : state === -1 ? '✕' : '';
+    const color = filterType==='lang' ? `<span class="fl-color" style="background:${LANG_COLORS[val]||'#555'}"></span>` : '';
+    return `<label class="fl-item" onclick="event.preventDefault(); cycleFilter('${filterType}','${esc(val)}')">
+      <span class="${cbClass}">${cbIcon}</span>
+      ${color}<span>${esc(label)}</span>
+      <span class="fl-cnt">${cnt}</span>
+    </label>`;
+  }).join('');
+}
+
+function filterSbList(type){
+  const map = {lang:'lang-list',tag:'tag-list'};
+  const searchId = {lang:'lang-search',tag:'tag-search'};
+  const q = document.getElementById(searchId[type]).value.toLowerCase();
+  const items = document.getElementById(map[type]).querySelectorAll('.fl-item');
+  items.forEach(item => {
+    const text = item.textContent.toLowerCase();
+    item.style.display = text.includes(q) ? '' : 'none';
+  });
+}
+
+function cycleFilter(type, val){
+  const map = { lang:activeLangFilter, tag:activeTagFilter, plat:activePlatFilter,
+                lic:activeLicFilter, arch2:activeArchFilter }[type];
+  const current = map.get(val) || 0;
+  const next = current === 0 ? 1 : current === 1 ? -1 : 0;
+  
+  if (next === 0) map.delete(val);
+  else map.set(val, next);
+  
+  applyFilters();
+  buildFilters();
+  if(type==='lang') filterSbList('lang');
+  if(type==='tag') filterSbList('tag');
+}
+
+function toggleTagFilter(tag){
+  const current = activeTagFilter.get(tag) || 0;
+  const next = current === 0 ? 1 : current === 1 ? -1 : 0;
+  
+  if (next === 0) activeTagFilter.delete(tag);
+  else activeTagFilter.set(tag, next);
+  
+  applyFilters();
+  buildFilters();
+  filterSbList('tag'); // Restore search view if user is searching tags
+}
+
+function clearFilter(type){
+  const map = { lang:activeLangFilter, tag:activeTagFilter, plat:activePlatFilter,
+                lic:activeLicFilter, arch2:activeArchFilter };
+  map[type].clear();
+  buildFilters();
+  applyFilters();
+}
+
+function clearAllFilters(){
+  activeLangFilter.clear(); activeTagFilter.clear(); activePlatFilter.clear();
+  activeLicFilter.clear(); activeArchFilter.clear();
+  document.getElementById('search-inp').value = '';
+  document.getElementById('star-range').value = 0;
+  document.getElementById('fork-range').value = 0;
+  document.getElementById('star-range-val').textContent = '0';
+  document.getElementById('fork-range-val').textContent = '0';
+  document.querySelectorAll('input[name=arch]')[0].checked = true;
+  buildFilters();
+  applyFilters();
+}
+
+/* ═══════════════════════════════════════════
+   APPLY FILTERS + SORT
+═══════════════════════════════════════════ */
+function applyFilters(){
+  const q        = document.getElementById('search-inp').value.toLowerCase();
+  const archVal  = document.querySelector('input[name=arch]:checked')?.value || 'all';
+  const minStars = parseInt(document.getElementById('star-range').value) || 0;
+  const minForks = parseInt(document.getElementById('fork-range').value) || 0;
+  const sortKey  = document.getElementById('sort-sel').value;
+
+  filtered = allRepos.filter(r => {
+    if (q) {
+      const hay = [r.name,r.full_name,r.description||'',...(r.topics||[]),...(r._tags||[])].join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    if (archVal==='active' && r.archived) return false;
+    if (archVal==='archived' && !r.archived) return false;
+    if (r.stargazers_count < minStars) return false;
+    if (r.forks_count < minForks) return false;
+    
+    // 3-State Map Logic
+    if (activeLangFilter.size > 0){
+      const l = r.language || '(none)';
+      for (const [lang, state] of activeLangFilter.entries()) {
+        if (state === 1 && l !== lang) return false; // Must be this language
+        if (state === -1 && l === lang) return false; // Must NOT be this language
+      }
+    }
+    if (activeTagFilter.size > 0){
+      const rt = new Set([...(r._tags||[]),...(r.topics||[])]);
+      for (const [t, state] of activeTagFilter.entries()) {
+        if (state === 1 && !rt.has(t)) return false; // Required tag missing
+        if (state === -1 && rt.has(t)) return false; // Excluded tag present
+      }
+    }
+    if (activePlatFilter.size > 0){
+      const rp = new Set(r._platforms || []);
+      for (const [p, state] of activePlatFilter.entries()) {
+        if (state === 1 && !rp.has(p)) return false;
+        if (state === -1 && rp.has(p)) return false;
+      }
+    }
+    if (activeLicFilter.size > 0){
+      const lic = r.license?.spdx_id || '(none)';
+      for (const [l, state] of activeLicFilter.entries()) {
+        if (state === 1 && lic !== l) return false;
+        if (state === -1 && lic === l) return false;
+      }
+    }
+    if (activeArchFilter.size > 0){
+      const ra = new Set(r._archs || []);
+      for (const [a, state] of activeArchFilter.entries()) {
+        if (state === 1 && !ra.has(a)) return false;
+        if (state === -1 && ra.has(a)) return false;
+      }
+    }
+    return true;
+  });
+
+  filtered.sort((a, b) => {
+    let va, vb;
+    switch(sortKey){
+      case 'stars':       va=a.stargazers_count; vb=b.stargazers_count; break;
+      case 'forks':       va=a.forks_count; vb=b.forks_count; break;
+      case 'updated':     va=new Date(a.updated_at); vb=new Date(b.updated_at); break;
+      case 'pushed':      va=new Date(a.pushed_at||a.updated_at); vb=new Date(b.pushed_at||b.updated_at); break;
+      case 'name-az':     va=a.name.toLowerCase(); vb=b.name.toLowerCase(); return va<vb?-1:va>vb?1:0;
+      case 'name-za':     va=a.name.toLowerCase(); vb=b.name.toLowerCase(); return va>vb?-1:va<vb?1:0;
+      case 'size':        va=a.size; vb=b.size; break;
+      case 'created':     va=new Date(a.created_at); vb=new Date(b.created_at); break;
+      case 'watchers':    va=a.watchers_count; vb=b.watchers_count; break;
+      case 'open-issues': va=a.open_issues_count; vb=b.open_issues_count; break;
+      default:            va=a.stargazers_count; vb=b.stargazers_count;
+    }
+    return (va > vb ? -1 : va < vb ? 1 : 0) * (sortDir === -1 ? 1 : -1);
+  });
+
+  document.getElementById('showing-cnt').textContent = fmtNum(filtered.length);
+  renderRepos(filtered);
+}
+
+function updateStats(){
+  const total   = allRepos.length;
+  const stars   = allRepos.reduce((s,r) => s+r.stargazers_count,0);
+  const forks   = allRepos.reduce((s,r) => s+r.forks_count,0);
+  const arched  = allRepos.filter(r=>r.archived).length;
+  document.getElementById('total-cnt').textContent    = fmtNum(total);
+  document.getElementById('total-stars').textContent  = fmtNum(stars);
+  document.getElementById('total-forks').textContent  = fmtNum(forks);
+  document.getElementById('archived-cnt').textContent = arched;
+  if (arched) document.getElementById('arch-stat').style.display='';
+}
+
+/* ═══════════════════════════════════════════
+   VIEW / SORT CONTROLS
+═══════════════════════════════════════════ */
+function setView(v){
+  currentView = v;
+  document.getElementById('vgrid').className = 'vbtn' + (v==='grid'?' on':'');
+  document.getElementById('vlist').className = 'vbtn' + (v==='list'?' on':'');
+  renderRepos(filtered);
+}
+
+function toggleDir(){
+  sortDir *= -1;
+  document.getElementById('dir-btn').textContent = sortDir===-1 ? '↓' : '↑';
+  applyFilters();
+}
+
+/* ═══════════════════════════════════════════
+   UTILS
+═══════════════════════════════════════════ */
+function setCacheBadge(cls, text){
+  const el = document.getElementById('cache-badge');
+  if (!el) return;
+  el.className = cls;
+  el.textContent = text;
+}
+
+function msToAge(ms){
+  if (ms <= 0) return '0s';
+  const s = Math.floor(ms/1000);
+  if (s < 60)   return s+'s';
+  const m = Math.floor(s/60);
+  if (m < 60)   return m+'m';
+  const h = Math.floor(m/60);
+  if (h < 24)   return h+'h';
+  return Math.floor(h/24)+'d';
+}
+
+function fmtNum(n){
+  n = parseInt(n)||0;
+  if (n>=1000000) return (n/1000000).toFixed(1)+'M';
+  if (n>=1000) return (n/1000).toFixed(1)+'k';
+  return n.toString();
+}
+
+function fmtSize(kb){
+  if (!kb) return '';
+  if (kb<1024) return kb+'KB';
+  return (kb/1024).toFixed(1)+'MB';
+}
+
+function relTime(dateStr){
+  if (!dateStr) return '—';
+  const diff = Date.now() - new Date(dateStr);
+  const d = Math.floor(diff/86400000);
+  if (d===0) return 'today';
+  if (d===1) return 'yesterday';
+  if (d<30)  return d+'d ago';
+  if (d<365) return Math.floor(d/30)+'mo ago';
+  return Math.floor(d/365)+'yr ago';
+}
+
+function esc(s){
+  if (s==null) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+const starSvg = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 11.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>`;
+const forkSvg = `<svg viewBox="0 0 16 16" fill="currentColor"><path d="M5 3.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm0 2.122a2.25 2.25 0 10-1.5 0v.878A2.25 2.25 0 005.75 8.5h1.5v2.128a2.251 2.251 0 101.5 0V8.5h1.5a2.25 2.25 0 002.25-2.25v-.878a2.25 2.25 0 10-1.5 0v.878a.75.75 0 01-.75.75h-4.5A.75.75 0 015 6.25v-.878zm3.75 7.378a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3-8.75a.75.75 0 11-1.5 0 .75.75 0 011.5 0z"/></svg>`;
+const githubSvg = `<svg viewBox="0 0 16 16" fill="currentColor" width="11" height="11"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>`;
+
+/* ═══════════════════════════════════════════
+   RENDER
+═══════════════════════════════════════════ */
+function renderRepos(repos){
+  const container = document.getElementById('repos-container');
+  const isGrid    = currentView === 'grid';
+  container.className = isGrid ? 'repos-grid' : 'repos-list';
+
+  if (repos.length === 0){
+    container.innerHTML = `<div class="empty"><h3>NO REPOS FOUND</h3><p>Try adjusting your filters.</p></div>`;
+    return;
+  }
+
+  const frag = document.createDocumentFragment();
+  const MAX_RENDER = 500;
+  const slice = repos.slice(0, MAX_RENDER);
+
+  slice.forEach((repo, idx) => {
+    const card = buildCard(repo, idx);
+    frag.appendChild(card);
+  });
+  container.innerHTML = '';
+  container.appendChild(frag);
+
+  if (repos.length > MAX_RENDER){
+    const note = document.createElement('div');
+    note.style = 'text-align:center;padding:20px;color:var(--textD);font-size:.7rem;';
+    note.textContent = `Showing first ${MAX_RENDER} of ${repos.length} results. Refine filters to see more.`;
+    container.appendChild(note);
+  }
+}
+
+window.toggleTags = function(id) {
+  const btn = document.getElementById('btn-'+id);
+  const container = document.getElementById('tc-'+id);
+  const hiddenTags = container.querySelectorAll('[data-hidden="true"]');
+  
+  if (btn.dataset.expanded === 'true') {
+    hiddenTags.forEach(t => t.style.display = 'none');
+    btn.dataset.expanded = 'false';
+    btn.textContent = `▼ Show ${hiddenTags.length} more tags`;
+  } else {
+    hiddenTags.forEach(t => t.style.display = 'inline-block');
+    btn.dataset.expanded = 'true';
+    btn.textContent = '▲ Show less';
+  }
+};
+
+function buildCard(repo, idx){
+  const el  = document.createElement('div');
+  el.className = 'rc' + (repo.archived ? ' archived' : '');
+  el.style.animationDelay = Math.min(idx * 20, 300) + 'ms';
+  el.dataset.repoid = repo.id;
+
+  const lang      = repo.language || '';
+  const langColor = LANG_COLORS[lang] || '#888';
+  const stars     = fmtNum(repo.stargazers_count);
+  const forks     = fmtNum(repo.forks_count);
+  const size      = fmtSize(repo.size);
+  const updated   = relTime(repo.pushed_at || repo.updated_at);
+  const issues    = repo.open_issues_count;
+  const movedUrl  = repo._moved;
+
+  const tags       = repo._tags || [];
+  const topics     = repo.topics || [];
+  const archs      = repo._archs || [];
+  const plats      = repo._platforms || [];
+
+  const archLabels = archs.map(a => ARCH_LABELS[a] || a);
+  const platLabels = plats.map(p => PLATFORM_LABELS[p] || p);
+  
+  const allTags = [...new Set([...tags, ...topics, ...platLabels, ...archLabels])].filter(Boolean);
+  
+  // Sort tags so active filters (both included and excluded) float to the front
+  allTags.sort((a, b) => {
+    const stateA = Math.abs(activeTagFilter.get(a) || 0);
+    const stateB = Math.abs(activeTagFilter.get(b) || 0);
+    if (stateA > stateB) return -1;
+    if (stateA < stateB) return 1;
+    return 0;
+  });
+
+  const VISIBLE_LIMIT = 8;
+  const tagHtml = allTags.map((t, i) => {
+    const cls   = getTagClass(t);
+    const state = activeTagFilter.get(t) || 0;
+    const on    = state === 1 ? ' on' : state === -1 ? ' exc' : '';
+    const hide  = i >= VISIBLE_LIMIT ? ' style="display:none;" data-hidden="true"' : '';
+    return `<span class="tag ${cls}${on}" onclick="toggleTagFilter('${esc(t)}')"${hide}>${esc(t)}</span>`;
+  }).join('');
+
+  let tagsMarkup = '';
+  if (allTags.length > 0) {
+    tagsMarkup = `
+      <div class="tags-wrapper">
+        <div class="tags-row" id="tc-${repo.id}">${tagHtml}</div>
+        ${allTags.length > VISIBLE_LIMIT ? `<button class="tags-expander" id="btn-${repo.id}" data-expanded="false" onclick="toggleTags('${repo.id}')">▼ Show ${allTags.length - VISIBLE_LIMIT} more tags</button>` : ''}
+      </div>
+    `;
+  }
+
+  const statsHtml = [
+    lang ? `<span class="stat"><span class="lang-dot" style="background:${langColor}"></span>${esc(lang)}</span>` : '',
+    `<span class="stat">${starSvg}${stars}</span>`,
+    `<span class="stat">${forkSvg}${forks}</span>`,
+    size ? `<span class="stat">📦 ${size}</span>` : '',
+    issues > 0 ? `<span class="stat stat-click" onclick="openRepoModal('${repo.full_name}', 'issues')" title="View Issues">🐛 ${issues}</span>` : '',
+    `<span class="stat">🕐 ${updated}</span>`,
+  ].filter(Boolean).join('');
+
+  let badges = '';
+  if (repo.archived)     badges += `<span class="badge ba">Archived</span>`;
+  if (movedUrl)          badges += `<span class="badge bm">Moved</span>`;
+  if (repo.fork)         badges += `<span class="badge bf">Fork</span>`;
+
+  const ghLink   = `<a class="abtn" href="${repo.html_url}" target="_blank">${githubSvg} GitHub</a>`;
+  const hpLink   = (repo.homepage && repo.homepage!==repo.html_url)
+    ? `<a class="abtn" href="${repo.homepage}" target="_blank">🔗 Website</a>` : '';
+  const mvLink   = movedUrl
+    ? `<a class="abtn abtn-m" href="${movedUrl}" target="_blank">➜ New Home</a>` : '';
+
+  el.innerHTML = `
+    <div class="rc-owner">${esc(repo.full_name.split('/')[0])}</div>
+    <div class="rc-head">
+      <span class="rc-name" onclick="openRepoModal('${repo.full_name}', 'readme')" title="Open Deep Dive Modal">${esc(repo.name)}</span>
+      ${badges}
+    </div>
+    ${repo.description ? `<div class="rc-desc">${esc(repo.description)}</div>` : ''}
+    <div class="rc-stats">${statsHtml}</div>
+    ${tagsMarkup}
+    <div class="rc-actions">${ghLink}${hpLink}${mvLink}</div>
+  `;
+  return el;
+}
+
+function getTagClass(tag){
+  const platLabels = Object.values(PLATFORM_LABELS);
+  const archLabels = Object.values(ARCH_LABELS);
+
+  if (platLabels.includes(tag)) return 'tag-p';
+  if (archLabels.includes(tag)) return 'tag-a';
+  return '';
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', () => {
+  // Initialize the key icon state on load
+  updateKeyIcon(!!localStorage.getItem('starmap_gh_token'));
+  
+  startFetch(true);
+
+  setInterval(() => {
+    const username = document.getElementById('uname-inp').value.trim();
+    const cached = loadCache(username);
+    if (!cached || cached.partial) startFetch(false);
+  }, 60 * 60 * 1000);
+});
+</script>
+</body>
+</html>
