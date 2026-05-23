@@ -45,6 +45,73 @@ body::after{
   background-size:48px 48px;
 }
 
+/* ── GEOMETRIC WRAPPERS (Inputs, Dropdowns) ── */
+.hex-wrap {
+  display: flex; padding: 1px; background: var(--borderB); position: relative;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  transition: background .2s;
+}
+.hex-wrap:focus-within { background: var(--cyan); }
+.hex-inner {
+  flex: 1; border: none; outline: none; background: var(--bg3); color: var(--textB);
+  font-family: 'JetBrains Mono', monospace; font-size: .82rem; padding: 7px 11px;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
+
+/* ── HOLLOW GEOMETRIC BUTTONS ── */
+.btn, .abtn {
+  position: relative; background: transparent; border: none; z-index: 1; cursor: pointer;
+  font-family: 'JetBrains Mono', monospace; transition: filter .2s, color .2s;
+  display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
+}
+.btn { padding: 7px 14px; font-size: .72rem; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
+.abtn { padding: 4px 8px; font-size: .62rem; color: var(--textD); gap: 3px; }
+
+.btn::before, .abtn::before {
+  content: ''; position: absolute; inset: 0; z-index: -2; transition: all .2s;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+}
+.abtn::before { clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px); background: var(--borderB); }
+.btn::before { background: var(--cyan); }
+
+.btn::after, .abtn::after {
+  content: ''; position: absolute; inset: 1px; z-index: -1; transition: all .2s;
+  clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
+}
+.abtn::after { clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); background: var(--card); }
+.btn::after { background: var(--bg); }
+
+/* Hover States */
+.btn:hover { color: #fff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.4)); }
+.btn:hover::before { background: var(--cyanD); }
+.btn:hover::after { background: rgba(0,229,255,0.1); }
+
+.abtn:hover { color: var(--cyan); }
+.abtn:hover::before { background: var(--cyan); }
+.abtn:hover::after { background: rgba(0,229,255,0.07); }
+
+/* Magenta Button Variant */
+.btn-mag { color: var(--mag); }
+.btn-mag::before { background: var(--mag); }
+.btn-mag:hover { color: #fff; filter: drop-shadow(0 0 8px rgba(255,0,144,0.4)); }
+.btn-mag:hover::after { background: rgba(255,0,144,0.1); }
+
+.abtn-m:hover { color: var(--mag); }
+.abtn-m:hover::before { background: var(--mag); }
+.abtn-m:hover::after { background: rgba(255,0,144,0.07); }
+
+/* View toggle buttons */
+.vbtn { 
+  position: relative; background: transparent; border: none; z-index: 1; cursor: pointer;
+  padding: 4px 10px; font-size: .8rem; color: var(--textD); transition: color .2s;
+}
+.vbtn::before { content: ''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s; }
+.vbtn::after { content: ''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .2s; }
+.vbtn.on { color: var(--cyan); }
+.vbtn.on::before { background: var(--cyan); }
+.vbtn.on::after { background: rgba(0,229,255,.07); }
+
 /* ── HEADER ─────────────────────────────────── */
 #hdr{
   position:relative;z-index:100;
@@ -58,38 +125,29 @@ body::after{
 }
 .logo em{color:var(--mag);font-style:normal;text-shadow:0 0 24px rgba(255,0,144,0.55);}
 .hdr-input-wrap{display:flex;gap:8px;flex:1;min-width:220px;max-width:460px;}
-.inp{
-  background:var(--bg3);border:1px solid var(--borderB);color:var(--textB);
-  font-family:'JetBrains Mono',monospace;font-size:.82rem;padding:7px 11px;outline:none;
-  transition:border-color .2s,box-shadow .2s;flex:1;
-}
-.inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.1);}
-.btn{
-  background:transparent;border:1px solid var(--cyan);color:var(--cyan);
-  font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:7px 14px;cursor:pointer;
-  transition:all .2s;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;
-}
-.btn:hover{background:rgba(0,229,255,.1);box-shadow:0 0 14px rgba(0,229,255,.3);}
-.btn-mag{border-color:var(--mag);color:var(--mag);}
-.btn-mag:hover{background:rgba(255,0,144,.1);box-shadow:0 0 14px rgba(255,0,144,.3);}
 #hdr-meta{font-size:.65rem;color:var(--textD);white-space:nowrap;margin-left:auto;}
 #hdr-meta b{color:var(--cyan);}
 
-/* ── API TOKEN MODAL ─────────────────────────── */
+/* ── MODALS (General & Token) ────────────────── */
 .modal-overlay {
   position:fixed;inset:0;background:rgba(7,7,15,.85);backdrop-filter:blur(5px);
   z-index:9000;display:flex;align-items:center;justify-content:center;
   opacity:0;pointer-events:none;transition:opacity .2s ease;
 }
 .modal-overlay.show { opacity:1;pointer-events:auto; }
+
+.modal-wrap {
+  padding: 2px; background: var(--cyan); filter: drop-shadow(0 15px 40px rgba(0,0,0,0.8));
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  max-width:420px; width:90%;
+}
 .modal {
-  background:var(--bg2);border:1px solid var(--borderB);padding:24px;
-  max-width:420px;width:90%;box-shadow:0 10px 40px rgba(0,0,0,.6);
-  border-top:2px solid var(--cyan);
+  background:var(--bg2); padding:24px;
+  clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
 }
 .modal h2 { font-family:'Orbitron',monospace;color:var(--cyan);font-size:1.1rem;margin-bottom:12px;letter-spacing:2px; }
 .modal p { font-size:.75rem;color:var(--textD);margin-bottom:16px;line-height:1.5; }
-.modal input { width:100%;margin-bottom:16px; }
+.modal .hex-wrap { margin-bottom: 16px; }
 .modal-actions { display:flex;gap:10px;justify-content:flex-end; }
 
 /* ── REPO DETAILS MODAL ──────────────────────── */
@@ -99,11 +157,17 @@ body::after{
   opacity:0;pointer-events:none;transition:opacity .2s ease;
 }
 .rm-overlay.show { opacity:1;pointer-events:auto; }
-.repo-modal {
-  background:var(--bg);border:1px solid var(--borderB);width:90vw;max-width:950px;
-  height:85vh;display:flex;flex-direction:column;border-top:2px solid var(--cyan);
-  box-shadow:0 15px 50px rgba(0,0,0,0.8);
+
+.repo-modal-wrap {
+  padding: 2px; background: var(--cyan); filter: drop-shadow(0 15px 50px rgba(0,0,0,0.9));
+  width: 90vw; max-width: 950px; height: 85vh;
+  clip-path: polygon(20px 0, 100% 0, 100% calc(100% - 20px), calc(100% - 20px) 100%, 0 100%, 0 20px);
 }
+.repo-modal {
+  background: var(--bg); height: 100%; display: flex; flex-direction: column;
+  clip-path: polygon(19px 0, 100% 0, 100% calc(100% - 19px), calc(100% - 19px) 100%, 0 100%, 0 19px);
+}
+
 .rm-header {
   padding:15px 20px;border-bottom:1px solid var(--border);display:flex;
   justify-content:space-between;align-items:center;background:var(--bg2);
@@ -112,19 +176,22 @@ body::after{
 .rm-header h2 span { color:var(--cyan); }
 .rm-close { background:none;border:none;color:var(--textD);cursor:pointer;font-size:1.4rem;transition:color .2s; }
 .rm-close:hover { color:var(--red); }
-.rm-tabs { display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto; }
+
+.rm-tabs { display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto; padding: 6px 12px; gap: 4px; }
 .rm-tab {
-  background:none;border:none;color:var(--textD);padding:12px 18px;
+  background:var(--bg3);border:none;color:var(--textD);padding:10px 18px;
   font-family:'JetBrains Mono',monospace;font-size:.75rem;cursor:pointer;
-  text-transform:uppercase;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;
+  text-transform:uppercase;white-space:nowrap; transition:all .2s;
+  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
-.rm-tab:hover { color:var(--textB); }
-.rm-tab.active { color:var(--cyan);border-bottom-color:var(--cyan);background:rgba(0,229,255,.05); }
+.rm-tab:hover { color:var(--textB); background: var(--bg4); }
+.rm-tab.active { color:var(--bg2); background: var(--cyan); font-weight: bold; }
+
 .rm-content { flex:1;overflow-y:auto;padding:20px;background:var(--bg);position:relative; }
 .rm-loading, .rm-empty { text-align:center;padding:60px 20px;color:var(--textD);font-size:.85rem;line-height:1.6; }
 .rm-empty p { margin-bottom: 20px; }
 
-/* Readme Markdown Styles (Using Oxanium!) */
+/* Readme Markdown Styles (Oxanium + JetBrains) */
 .markdown-body { color:var(--text);font-family:'Oxanium', sans-serif;line-height:1.6;font-size:1rem; }
 .markdown-body h1, .markdown-body h2, .markdown-body h3, .markdown-body h4 { color:var(--textB);border-bottom:1px solid var(--border);padding-bottom:0.3em;margin-top:1.5em;margin-bottom:16px; font-weight:600; }
 .markdown-body h1 { font-size: 1.8rem; }
@@ -133,38 +200,51 @@ body::after{
 .markdown-body a:hover { text-decoration:underline; }
 .markdown-body p, .markdown-body ul, .markdown-body ol { margin-bottom: 16px; }
 .markdown-body ul, .markdown-body ol { padding-left: 2em; }
-.markdown-body pre, .markdown-body code { background:var(--bg3);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:.85em; }
-.markdown-body code { padding:0.2em 0.4em; }
-.markdown-body pre { padding:16px;overflow:auto;border:1px solid var(--borderB); }
-.markdown-body pre code { background:transparent;padding:0; }
-.markdown-body img { max-width:100%;background:var(--bg2); }
+.markdown-body pre, .markdown-body code { background:var(--bg3); font-family:'JetBrains Mono',monospace;font-size:.85em; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+.markdown-body code { padding:0.2em 0.5em; }
+.markdown-body pre { padding:16px;overflow:auto; }
+.markdown-body pre code { background:transparent;padding:0; clip-path: none; }
+.markdown-body img { max-width:100%;background:var(--bg2); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
 .markdown-body blockquote { border-left:4px solid var(--borderB);padding-left:1em;color:var(--textD);margin-left:0;margin-bottom:16px; }
 .markdown-body table { border-collapse:collapse;width:100%;margin-bottom:16px; }
 .markdown-body th, .markdown-body td { border:1px solid var(--borderB);padding:8px 12px; }
 .markdown-body th { background:var(--bg2); }
 
-/* Extensively Styled Issues / PRs */
+/* Issues / PR Styles */
 .rm-issue { border-bottom:1px solid var(--border);padding:14px 0;display:flex;flex-direction:column;gap:8px; }
 .rm-issue:last-child { border-bottom:none; }
 .rmi-top { display:flex;justify-content:space-between;align-items:flex-start;gap:12px; }
 .rmi-title-wrap { display:flex;flex-direction:column;gap:6px;flex:1; }
 .rmi-title-row { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
-.rmi-status { font-family:'JetBrains Mono', monospace; font-size:.6rem; padding:3px 6px; border:1px solid; border-radius:3px; text-transform:uppercase; font-weight:bold; letter-spacing:1px; flex-shrink:0;}
-.rmi-status.open { border-color:var(--grn); color:var(--grn); background:rgba(0,255,136,0.1); }
-.rmi-status.draft { border-color:var(--textD); color:var(--textD); background:rgba(80,96,122,0.1); }
+
+.rmi-status { 
+  font-family:'JetBrains Mono', monospace; font-size:.6rem; padding:3px 7px; text-transform:uppercase; 
+  font-weight:bold; letter-spacing:1px; flex-shrink:0; position: relative; z-index: 1; color: var(--c);
+}
+.rmi-status::before { content:''; position:absolute; inset:0; background: var(--c); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); }
+.rmi-status::after { content:''; position:absolute; inset:1px; background: var(--bg); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); }
+.rmi-status.open { --c: var(--grn); }
+.rmi-status.open::after { background: rgba(0,255,136,0.1); }
+.rmi-status.draft { --c: var(--textD); }
+.rmi-status.draft::after { background: rgba(80,96,122,0.1); }
+
 .rmi-title { font-size:.95rem;font-weight:600;line-height:1.4; font-family:'Oxanium', sans-serif; }
 .rmi-title a { color:var(--textB);text-decoration:none; }
 .rmi-title a:hover { color:var(--cyan);text-decoration:underline; }
 .rmi-labels { display:flex;flex-wrap:wrap;gap:4px; }
-.rmi-label { font-size:0.65rem;padding:2px 7px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:0.3px; border:1px solid rgba(255,255,255,0.1); }
+.rmi-label { 
+  font-size:0.65rem;padding:3px 7px;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:0.3px; 
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
+}
 .rmi-side { display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0; }
 .rmi-comments { display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--textD);font-family:'JetBrains Mono',monospace; }
 .rmi-assignees { display:flex;gap:4px; }
-.rmi-assignee { width:22px;height:22px;border-radius:50%;border:1px solid var(--borderB); }
+.rmi-assignee { width:22px;height:22px; clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px); background: var(--borderB); }
 .rmi-meta { font-size:.75rem;color:var(--textD);font-family:'Oxanium', sans-serif; display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
 .rmi-meta a { color:var(--textD);text-decoration:none; font-weight:600;}
 .rmi-meta a:hover { color:var(--text); }
-.rmi-avatar { width:16px;height:16px;border-radius:50%;vertical-align:middle;margin-right:4px; }
+.rmi-avatar { width:16px;height:16px; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); vertical-align:middle;margin-right:4px; }
+
 
 /* ── PROGRESS ────────────────────────────────── */
 #pbar{position:fixed;top:0;left:0;height:2px;width:0;z-index:9998;
@@ -196,7 +276,6 @@ body::after{
   font-family:'Orbitron',monospace;font-size:.6rem;letter-spacing:3px;color:var(--cyan);
   text-transform:uppercase;margin-bottom:8px;padding-bottom:5px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px;
 }
-.sb-search{width:100%;margin-bottom:6px;font-size:.72rem;}
 .fl-list{max-height:240px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--borderB) transparent;}
 .fl-item{
   display:flex;align-items:center;gap:7px;padding:3px 2px;cursor:pointer;font-size:.72rem;
@@ -204,7 +283,12 @@ body::after{
 }
 .fl-item:hover{color:var(--cyan);}
 .fl-cnt{margin-left:auto;color:var(--textD);font-size:.6rem;}
-.fl-color{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+.fl-color{
+  width:10px;height:10px;flex-shrink:0;
+  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+}
+
 .radio-grp{display:flex;flex-direction:column;gap:5px;}
 .radio-item{display:flex;align-items:center;gap:7px;font-size:.72rem;cursor:pointer;user-select:none;}
 .radio-item input{accent-color:var(--mag);cursor:pointer;}
@@ -216,12 +300,20 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 
 /* 3-State Checkbox */
 .cb {
-  display:inline-flex; align-items:center; justify-content:center;
-  width:13px; height:13px; border:1px solid var(--borderB); border-radius:2px;
-  flex-shrink:0; font-size:9px; font-weight:bold; color:transparent; transition:all .15s;
+  display:inline-flex; align-items:center; justify-content:center; position: relative;
+  width:14px; height:14px; flex-shrink:0; font-size:9px; font-weight:bold; color:transparent; z-index: 1; margin-right: 2px;
 }
-.cb.on { border-color:var(--cyan); background:rgba(0,229,255,.15); color:var(--cyan); }
-.cb.exc { border-color:var(--red); background:rgba(255,51,85,.15); color:var(--red); }
+.cb::before { content:''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: all .15s;}
+.cb::after { content:''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: all .15s;}
+
+.cb.on { color: var(--cyan); }
+.cb.on::before { background: var(--cyan); }
+.cb.on::after { background: rgba(0,229,255,.15); }
+
+.cb.exc { color: var(--red); }
+.cb.exc::before { background: var(--red); }
+.cb.exc::after { background: rgba(255,51,85,.15); }
+
 
 /* ── STICKY TOP RAIL (sort + stats combined) ─── */
 #top-rail{
@@ -235,25 +327,9 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
   border-bottom:1px solid var(--border);flex-wrap:nowrap;overflow:hidden;
 }
 .sort-lbl{font-size:.65rem;color:var(--textD);letter-spacing:2px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
-select{
-  background:var(--bg3);border:1px solid var(--borderB);color:var(--textB);
-  font-family:'JetBrains Mono',monospace;font-size:.78rem;padding:5px 8px;outline:none;cursor:pointer;
-  min-width:0;flex-shrink:1;
-}
-select:focus{border-color:var(--cyan);}
-#dir-btn{
-  background:transparent;border:1px solid var(--borderB);color:var(--textD);
-  font-family:'JetBrains Mono',monospace;font-size:.8rem;width:28px;height:28px;cursor:pointer;flex-shrink:0;
-  transition:all .2s;display:flex;align-items:center;justify-content:center;
-}
-#dir-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+
 .sort-spacer{flex:1;min-width:4px;}
 .view-tog{display:flex;gap:3px;flex-shrink:0;}
-.vbtn{
-  padding:4px 9px;border:1px solid var(--borderB);background:transparent;color:var(--textD);
-  cursor:pointer;font-size:.75rem;transition:all .2s;flex-shrink:0;
-}
-.vbtn.on{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.07);}
 
 /* ── STATS STRIP ─────────────────────────────── */
 #statsbar{
@@ -266,11 +342,12 @@ select:focus{border-color:var(--cyan);}
 .sbar-item:first-child{padding-left:0;}
 .sbar-item:last-child{border-right:none;}
 #cache-badge{
-  margin-left:auto;padding:1px 6px;font-size:.58rem;letter-spacing:1px;flex-shrink:0;
-  border:1px solid var(--border);color:var(--textD);
+  margin-left:auto;padding:3px 8px;font-size:.58rem;letter-spacing:1px;flex-shrink:0;
+  color:var(--textD); background: var(--bg3);
+  clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
 }
-#cache-badge.live{border-color:rgba(255,0,144,.35);color:var(--mag);}
-#cache-badge.cached{border-color:rgba(0,255,136,.35);color:var(--grn);}
+#cache-badge.live{color:var(--mag); background: rgba(255,0,144,0.15); }
+#cache-badge.cached{color:var(--grn); background: rgba(0,255,136,0.15); }
 
 /* ── MAIN ────────────────────────────────────── */
 #main{flex:1;overflow:visible;min-width:0;}
@@ -278,37 +355,84 @@ select:focus{border-color:var(--cyan);}
 .repos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:stretch;}
 .repos-list{display:flex;flex-direction:column;gap:8px;}
 
-/* ── REPO CARD ───────────────────────────────── */
-.rc{
-  background:var(--card);border:1px solid var(--border);padding:13px;position:relative;
-  transition:border-color .18s,box-shadow .18s;animation:fadeUp .28s ease both;
-  display:flex;flex-direction:column;height:100%;
+/* ── REPO CARD (SCI-FI HEXAGON) ──────────────── */
+.rc {
+  background: var(--border);
+  padding: 1px;
+  position: relative;
+  transition: background .18s, filter .18s;
+  animation: fadeUp .28s ease both;
+  display: flex; 
+  flex-direction: column; 
+  height: 100%;
+  clip-path: polygon(16px 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%, 0 16px);
+}
+.rc-content {
+  background: var(--card); 
+  flex: 1;
+  display: flex; 
+  flex-direction: column;
+  padding: 14px;
+  clip-path: polygon(15px 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%, 0 15px);
+  position: relative;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.rc::before{
-  content:'';position:absolute;top:0;right:0;width:9px;height:9px;
-  border-top:2px solid var(--cyan);border-right:2px solid var(--cyan);
+
+.rc:hover {
+  background: var(--cyanD);
+  filter: drop-shadow(0 0 8px rgba(0,229,255,0.25));
 }
-.rc:hover{border-color:var(--cyanD);box-shadow:0 0 22px rgba(0,229,255,.07);}
-.rc.archived{border-color:rgba(255,214,0,.3);}
-.rc.archived::before{border-color:var(--yel);}
-.rc.archived:hover{border-color:var(--yel);box-shadow:0 0 22px rgba(255,214,0,.07);}
+.rc.archived {
+  background: rgba(255, 214, 0, 0.4);
+}
+.rc.archived:hover {
+  background: var(--yel);
+  filter: drop-shadow(0 0 8px rgba(255,214,0,0.25));
+}
 
-.rc-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;}
+.rc-content::before {
+  content: ''; position: absolute; top: 0; right: 0; width: 9px; height: 9px;
+  border-top: 2px solid var(--cyan); border-right: 2px solid var(--cyan);
+}
+.rc.archived .rc-content::before { border-color: var(--yel); }
 
-/* Interactive Repo Name */
+/* Avatar Layout */
+.rc-top-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+.rc-avatar-wrap {
+  width: 40px; height: 40px; flex-shrink: 0; background: var(--borderB); padding: 1px;
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+}
+.rc-avatar {
+  width: 100%; height: 100%; object-fit: cover; display: block; background: var(--bg2);
+  clip-path: polygon(9px 0, 100% 0, 100% calc(100% - 9px), calc(100% - 9px) 100%, 0 100%, 0 9px);
+}
+
+.rc-title-area {
+  display: flex; flex-direction: column; flex: 1; min-width: 0; 
+}
+.rc-owner{font-size:.6rem;color:var(--textD);margin-bottom:2px;}
+.rc-head{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap;}
+
 .rc-name{
   font-family:'Orbitron',monospace;font-size:.82rem;font-weight:700;color:var(--textB);
   cursor:pointer;flex:1;word-break:break-word;line-height:1.4;transition:color .2s;
 }
 .rc-name:hover{color:var(--cyan);}
 
-.rc-owner{font-size:.6rem;color:var(--textD);margin-bottom:4px;}
-
-.badge{font-size:.55rem;padding:2px 5px;border:1px solid;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
-.ba{border-color:var(--yel);color:var(--yel);}
-.bm{border-color:var(--mag);color:var(--mag);}
-.bf{border-color:var(--textD);color:var(--textD);}
+/* Badges (Archived, Moved, etc) - Hollow Hex */
+.badge {
+  position: relative; font-size: .55rem; padding: 2px 6px; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; z-index: 1; color: var(--c);
+}
+.badge::before { content:''; position:absolute; inset:0; background: var(--c); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); }
+.badge::after { content:''; position:absolute; inset:1px; background: var(--card); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); }
+.badge.ba { --c: var(--yel); }
+.badge.bm { --c: var(--mag); }
+.badge.bf { --c: var(--textD); }
 
 .rc-desc{font-size:.72rem;color:var(--text);margin-bottom:8px;line-height:1.55;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -318,54 +442,48 @@ select:focus{border-color:var(--cyan);}
 .stat-click { cursor:pointer;transition:color .2s; }
 .stat-click:hover { color:var(--cyan); }
 .stat svg{width:11px;height:11px;flex-shrink:0;}
-.lang-dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;}
+.lang-dot{
+  width:10px;height:10px;flex-shrink:0; display:inline-block;
+  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+}
 
 /* ── TAGS ────────────────────────────────────── */
 .tags-wrapper{margin-bottom:10px;}
 .tags-row{display:flex;flex-wrap:wrap;gap:4px;}
-.tags-expander{
-  font-size:.55rem;color:var(--cyanD);cursor:pointer;background:none;border:none;
-  padding:5px 0 0 0;font-family:'JetBrains Mono',monospace;transition:color .2s;
-}
-.tags-expander:hover{color:var(--cyan);}
 
-.tag{display:inline-block;font-size:.58rem;padding:2px 5px;border:1px solid rgba(0,229,255,.2);background:rgba(0,229,255,.05);color:var(--cyanD);cursor:pointer;transition:all .15s;letter-spacing:.3px;}
-.tag:hover,.tag.on{background:rgba(0,229,255,.14);border-color:var(--cyan);color:var(--cyan);}
+.tag {
+  position: relative; display: inline-block; padding: 3px 7px; font-size: .58rem;
+  color: var(--t-col); cursor: pointer; letter-spacing: .3px; z-index: 1;
+}
+.tag::before { content: ''; position: absolute; inset: 0; background: var(--t-bg); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s;}
+.tag::after { content: ''; position: absolute; inset: 1px; background: var(--bg); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .15s; }
+.tag:hover::after, .tag.on::after { background: var(--t-h-bg); }
+.tag:hover, .tag.on { color: var(--t-col-hover); }
+
+/* Tag Types */
+.tag { --t-col: var(--cyanD); --t-col-hover: var(--cyan); --t-bg: rgba(0,229,255,0.3); --t-h-bg: rgba(0,229,255,0.14); }
+.tag-p { --t-col: var(--yel); --t-col-hover: var(--yel); --t-bg: rgba(255,214,0,0.3); --t-h-bg: rgba(255,214,0,0.14); }
+.tag-a { --t-col: #ffba55; --t-col-hover: #ffba55; --t-bg: rgba(255,165,0,0.3); --t-h-bg: rgba(255,165,0,0.14); }
 
 /* Negative "Exclude" State */
-.tag.exc, .tag-p.exc, .tag-a.exc {
-  background:rgba(255,51,85,.14) !important;
-  border-color:var(--red) !important;
-  color:var(--red) !important;
-  text-decoration: line-through;
-}
+.tag.exc { --t-col: var(--red) !important; --t-col-hover: var(--red) !important; --t-bg: var(--red) !important; --t-h-bg: rgba(255,51,85,.14) !important; text-decoration: line-through; }
 
-.tag-p{border-color:rgba(255,214,0,.25);color:var(--yel);background:rgba(255,214,0,.05);}
-.tag-p:hover,.tag-p.on{background:rgba(255,214,0,.14);border-color:var(--yel);}
-.tag-a{border-color:rgba(255,165,0,.35);color:#ffba55;background:rgba(255,140,0,.07);}
-.tag-a:hover,.tag-a.on{background:rgba(255,165,0,.14);border-color:#ffba55;color:#ffba55;}
-
-.rc-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:auto;padding-top:10px;}
-.abtn{
-  font-size:.62rem;padding:4px 8px;background:transparent;border:1px solid var(--borderB);
-  color:var(--textD);cursor:pointer;transition:all .15s;text-decoration:none;
-  display:inline-flex;align-items:center;gap:3px;font-family:'JetBrains Mono',monospace;
-}
-.abtn:hover{border-color:var(--cyan);color:var(--cyan);}
-.abtn-m{border-color:rgba(255,0,144,.3);color:var(--mag);}
-.abtn-m:hover{border-color:var(--mag);background:rgba(255,0,144,.07);}
+.rc-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:10px;}
 
 /* list-view card */
-.repos-list .rc{display:flex;flex-direction:column;gap:5px;}
+.repos-list .rc-content{display:flex;flex-direction:column;gap:5px;}
 
 /* ── EMPTY STATE ─────────────────────────────── */
 .empty{text-align:center;padding:60px 20px;color:var(--textD);}
 .empty h3{font-family:'Orbitron',monospace;color:var(--textD);margin-bottom:8px;font-size:.9rem;letter-spacing:3px;}
 
 /* ── SCROLLBAR ───────────────────────────────── */
-::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar{width:7px;height:7px;}
 ::-webkit-scrollbar-track{background:var(--bg);}
-::-webkit-scrollbar-thumb{background:var(--borderB);}
+::-webkit-scrollbar-thumb{
+  background:var(--borderB);
+  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+}
 ::-webkit-scrollbar-thumb:hover{background:var(--cyanD);}
 
 /* ── RESPONSIVE ──────────────────────────────── */
@@ -394,43 +512,53 @@ select:focus{border-color:var(--cyan);}
 <div id="hdr">
   <div class="logo">STAR<em>MAP</em></div>
   <div class="hdr-input-wrap">
-    <input class="inp" id="uname-inp" type="text" placeholder="github username" value="sametaor">
+    <div class="hex-wrap" style="flex:1; min-width:140px;">
+      <input class="inp hex-inner" id="uname-inp" type="text" placeholder="github username" value="sametaor">
+    </div>
     <button class="btn" onclick="startFetch(true)">FETCH</button>
     <button class="btn btn-mag" onclick="startFetch(false)" id="refresh-btn" title="Force refresh (bypass cache)">↺</button>
-    <button class="btn" id="key-btn" onclick="openTokenModal()" title="API Token Settings" style="border-color:var(--borderB);color:var(--textD);padding:7px 10px;">🔑</button>
+    <button class="btn" id="key-btn" onclick="openTokenModal()" title="API Token Settings">🔑</button>
   </div>
   <div id="hdr-meta">Last updated: <b id="last-upd">—</b></div>
 </div>
 
 <div class="modal-overlay" id="token-overlay" onclick="if(event.target===this) closeTokenModal()">
-  <div class="modal">
-    <h2>API Rate Limits</h2>
-    <p>Unauthenticated GitHub requests are limited to 60 per hour. Provide a GitHub Personal Access Token (PAT) to increase this limit to 5,000 per hour.</p>
-    <p style="font-size:0.65rem; color:var(--textD); margin-bottom:12px;"><em>Your token is stored locally in your browser and never sent anywhere except directly to GitHub's API. A fine-grained token with "Public Repositories (read-only)" access is recommended.</em></p>
-    <input type="password" class="inp" id="gh-token-inp" placeholder="ghp_xxxxxxxxxxxx...">
-    <div class="modal-actions">
-      <button class="btn" style="border-color:var(--borderB); color:var(--textD);" onclick="clearToken()">CLEAR</button>
-      <button class="btn" onclick="closeTokenModal()">CANCEL</button>
-      <button class="btn" style="border-color:var(--grn); color:var(--grn);" onclick="saveToken()">SAVE</button>
+  <div class="modal-wrap">
+    <div class="modal hex-inner">
+      <h2>API Rate Limits</h2>
+      <p>Unauthenticated GitHub requests are limited to 60 per hour. Provide a GitHub Personal Access Token (PAT) to increase this limit to 5,000 per hour.</p>
+      <p style="font-size:0.65rem; color:var(--textD); margin-bottom:12px;"><em>Your token is stored locally in your browser and never sent anywhere except directly to GitHub's API. A fine-grained token with "Public Repositories (read-only)" access is recommended.</em></p>
+      
+      <div class="hex-wrap" style="margin-bottom: 16px;">
+        <input type="password" class="inp hex-inner" id="gh-token-inp" placeholder="ghp_xxxxxxxxxxxx...">
+      </div>
+
+      <div class="modal-actions">
+        <button class="abtn" onclick="clearToken()">CLEAR</button>
+        <button class="abtn" onclick="closeTokenModal()">CANCEL</button>
+        <button class="btn" onclick="saveToken()">SAVE</button>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="rm-overlay" id="repo-modal-overlay" onclick="if(event.target===this) closeRepoModal()">
-  <div class="repo-modal">
-    <div class="rm-header">
-      <h2 id="rm-title">Owner / <span>Repo</span></h2>
-      <button class="rm-close" onclick="closeRepoModal()">✕</button>
-    </div>
-    <div class="rm-tabs">
-      <button class="rm-tab active" data-tab="readme" onclick="loadRepoTab('readme')">README.md</button>
-      <button class="rm-tab" data-tab="issues" onclick="loadRepoTab('issues')">Issues</button>
-      <button class="rm-tab" data-tab="prs" onclick="loadRepoTab('prs')">Pull Requests</button>
-      <button class="rm-tab" data-tab="discussions" onclick="loadRepoTab('discussions')">Discussions</button>
-      <button class="rm-tab" data-tab="wiki" onclick="loadRepoTab('wiki')">Wiki</button>
-    </div>
-    <div class="rm-content" id="rm-content">
+  <div class="repo-modal-wrap">
+    <div class="repo-modal hex-inner">
+      <div class="rm-header">
+        <h2 id="rm-title">Owner / <span>Repo</span></h2>
+        <button class="rm-close" onclick="closeRepoModal()">✕</button>
       </div>
+      <div class="rm-tabs">
+        <button class="rm-tab active" data-tab="readme" onclick="loadRepoTab('readme')">README.md</button>
+        <button class="rm-tab" data-tab="issues" onclick="loadRepoTab('issues')">Issues</button>
+        <button class="rm-tab" data-tab="prs" onclick="loadRepoTab('prs')">Pull Requests</button>
+        <button class="rm-tab" data-tab="discussions" onclick="loadRepoTab('discussions')">Discussions</button>
+        <button class="rm-tab" data-tab="wiki" onclick="loadRepoTab('wiki')">Wiki</button>
+      </div>
+      <div class="rm-content" id="rm-content">
+        </div>
+    </div>
   </div>
 </div>
 
@@ -442,7 +570,9 @@ select:focus{border-color:var(--cyan);}
       <div class="sb-title">
         <span>🔍 Search</span>
       </div>
-      <input class="inp sb-search" id="search-inp" type="text" placeholder="name, description, topic…" oninput="applyFilters()">
+      <div class="hex-wrap" style="margin-bottom:6px;">
+        <input class="inp hex-inner sb-search" id="search-inp" type="text" placeholder="name, description, topic…" oninput="applyFilters()" style="margin-bottom:0;">
+      </div>
     </div>
 
     <div class="sb-sec">
@@ -450,7 +580,9 @@ select:focus{border-color:var(--cyan);}
         <span>⬡ Languages</span>
         <span class="sb-clear" onclick="clearFilter('lang')">clear</span>
       </div>
-      <input class="inp sb-search" id="lang-search" type="text" placeholder="filter languages…" oninput="filterSbList('lang')">
+      <div class="hex-wrap" style="margin-bottom:6px;">
+        <input class="inp hex-inner sb-search" id="lang-search" type="text" placeholder="filter languages…" oninput="filterSbList('lang')" style="margin-bottom:0;">
+      </div>
       <div class="fl-list" id="lang-list"></div>
     </div>
 
@@ -475,7 +607,9 @@ select:focus{border-color:var(--cyan);}
         <span>🏷 Tags</span>
         <span class="sb-clear" onclick="clearFilter('tag')">clear</span>
       </div>
-      <input class="inp sb-search" id="tag-search" type="text" placeholder="filter tags…" oninput="filterSbList('tag')">
+      <div class="hex-wrap" style="margin-bottom:6px;">
+        <input class="inp hex-inner sb-search" id="tag-search" type="text" placeholder="filter tags…" oninput="filterSbList('tag')" style="margin-bottom:0;">
+      </div>
       <div class="fl-list" id="tag-list"></div>
     </div>
 
@@ -515,18 +649,20 @@ select:focus{border-color:var(--cyan);}
 
     <div id="sortbar">
       <span class="sort-lbl">Sort:</span>
-      <select id="sort-sel" onchange="applyFilters()">
-        <option value="stars">⭐ Stars</option>
-        <option value="forks">🍴 Forks</option>
-        <option value="updated">🕐 Last Updated</option>
-        <option value="pushed">📤 Last Push</option>
-        <option value="name-az">🔤 Name A→Z</option>
-        <option value="name-za">🔤 Name Z→A</option>
-        <option value="size">📦 Repo Size</option>
-        <option value="created">📅 Date Created</option>
-        <option value="watchers">👁 Watchers</option>
-        <option value="open-issues">🐛 Open Issues</option>
-      </select>
+      <div class="hex-wrap" style="flex-shrink: 1; min-width: 0;">
+        <select id="sort-sel" class="hex-inner" onchange="applyFilters()">
+          <option value="stars">⭐ Stars</option>
+          <option value="forks">🍴 Forks</option>
+          <option value="updated">🕐 Last Updated</option>
+          <option value="pushed">📤 Last Push</option>
+          <option value="name-az">🔤 Name A→Z</option>
+          <option value="name-za">🔤 Name Z→A</option>
+          <option value="size">📦 Repo Size</option>
+          <option value="created">📅 Date Created</option>
+          <option value="watchers">👁 Watchers</option>
+          <option value="open-issues">🐛 Open Issues</option>
+        </select>
+      </div>
       <button id="dir-btn" onclick="toggleDir()" title="Toggle sort direction">↓</button>
       <div class="sort-spacer"></div>
       <span class="sort-lbl">View:</span>
@@ -552,9 +688,16 @@ select:focus{border-color:var(--cyan);}
 'use strict';
 
 /* ═══════════════════════════════════════════
+   SAFE LOCALSTORAGE WRAPPERS
+═══════════════════════════════════════════ */
+function getLocal(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+function setLocal(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
+function rmLocal(key) { try { localStorage.removeItem(key); } catch(e) {} }
+
+/* ═══════════════════════════════════════════
    CONSTANTS & CONFIG
 ═══════════════════════════════════════════ */
-const CACHE_KEY = 'starmap_cache_v4'; 
+const CACHE_KEY = 'starmap_cache_v7'; 
 const CACHE_TTL = 7 * 24 * 60 * 60 * 1000; // 7 days
 const API_BASE  = 'https://api.github.com';
 
@@ -598,7 +741,7 @@ let activePlatFilter = new Map();
    TOKEN MANAGEMENT
 ═══════════════════════════════════════════ */
 function openTokenModal() {
-  document.getElementById('gh-token-inp').value = localStorage.getItem('starmap_gh_token') || '';
+  document.getElementById('gh-token-inp').value = getLocal('starmap_gh_token') || '';
   document.getElementById('token-overlay').classList.add('show');
 }
 function closeTokenModal() {
@@ -607,7 +750,7 @@ function closeTokenModal() {
 function saveToken() {
   const val = document.getElementById('gh-token-inp').value.trim();
   if (val) {
-    localStorage.setItem('starmap_gh_token', val);
+    setLocal('starmap_gh_token', val);
     updateKeyIcon(true);
   } else {
     clearToken();
@@ -615,26 +758,25 @@ function saveToken() {
   closeTokenModal();
 }
 function clearToken() {
-  localStorage.removeItem('starmap_gh_token');
+  rmLocal('starmap_gh_token');
   document.getElementById('gh-token-inp').value = '';
   updateKeyIcon(false);
   closeTokenModal();
 }
 function updateKeyIcon(hasToken) {
   const btn = document.getElementById('key-btn');
+  if (!btn) return;
   if (hasToken) {
-    btn.style.borderColor = 'var(--grn)';
     btn.style.color = 'var(--grn)';
   } else {
-    btn.style.borderColor = 'var(--borderB)';
-    btn.style.color = 'var(--textD)';
+    btn.style.color = 'var(--cyan)';
   }
 }
 
 // Universal API Fetcher that attaches the token if available
 async function githubApiFetch(path, acceptHeader = 'application/vnd.github.v3+json') {
   const headers = { 'Accept': acceptHeader };
-  const token = localStorage.getItem('starmap_gh_token');
+  const token = getLocal('starmap_gh_token');
   if (token) headers['Authorization'] = `Bearer ${token}`;
   return fetch(API_BASE + path, { headers });
 }
@@ -675,7 +817,8 @@ function closeRepoModal() {
 async function loadRepoTab(tab) {
   // Update active styling
   document.querySelectorAll('.rm-tab').forEach(b => b.classList.remove('active'));
-  document.querySelector(`.rm-tab[data-tab="${tab}"]`).classList.add('active');
+  const activeBtn = document.querySelector(`.rm-tab[data-tab="${tab}"]`);
+  if (activeBtn) activeBtn.classList.add('active');
 
   const content = document.getElementById('rm-content');
   content.innerHTML = '<div class="rm-loading">Fetching live data from GitHub...</div>';
@@ -694,14 +837,13 @@ async function loadRepoTab(tab) {
       if (!res.ok) throw new Error(`API Error: ${res.status}`);
       
       const allIssues = await res.json();
-      // GitHub API returns PRs in the issues endpoint, we must filter them out
       const pureIssues = allIssues.filter(i => !i.pull_request);
       
       if (pureIssues.length === 0) {
         content.innerHTML = `<div class="rm-empty"><p>No open issues found.</p></div>`;
       } else {
         content.innerHTML = pureIssues.map(i => {
-          const labelsHtml = i.labels.map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
           const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
           const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
 
@@ -722,8 +864,8 @@ async function loadRepoTab(tab) {
             </div>
             <div class="rmi-meta">
                #${i.number} opened on ${new Date(i.created_at).toLocaleDateString()} by 
-               <a href="${i.user.html_url}" target="_blank">
-                 <img src="${i.user.avatar_url}" class="rmi-avatar">@${esc(i.user.login)}
+               <a href="${i.user?.html_url||'#'}" target="_blank">
+                 <img src="${i.user?.avatar_url||''}" class="rmi-avatar">@${esc(i.user?.login||'unknown')}
                </a>
             </div>
           </div>
@@ -739,7 +881,7 @@ async function loadRepoTab(tab) {
         content.innerHTML = `<div class="rm-empty"><p>No open pull requests found.</p></div>`;
       } else {
         content.innerHTML = prs.map(i => {
-          const labelsHtml = i.labels.map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
           const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
           const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
           const isDraft = i.draft;
@@ -763,8 +905,8 @@ async function loadRepoTab(tab) {
             </div>
             <div class="rmi-meta">
                #${i.number} opened on ${new Date(i.created_at).toLocaleDateString()} by 
-               <a href="${i.user.html_url}" target="_blank">
-                 <img src="${i.user.avatar_url}" class="rmi-avatar">@${esc(i.user.login)}
+               <a href="${i.user?.html_url||'#'}" target="_blank">
+                 <img src="${i.user?.avatar_url||''}" class="rmi-avatar">@${esc(i.user?.login||'unknown')}
                </a>
             </div>
           </div>
@@ -775,14 +917,14 @@ async function loadRepoTab(tab) {
       content.innerHTML = `
         <div class="rm-empty">
           <p>Discussions require GraphQL queries and cannot be reliably rendered via the standard REST API.</p>
-          <a class="abtn abtn-m" href="https://github.com/${currentModalRepo}/discussions" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Discussions on GitHub</a>
+          <a class="abtn" href="https://github.com/${currentModalRepo}/discussions" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Discussions on GitHub</a>
         </div>
       `;
     } else if (tab === 'wiki') {
       content.innerHTML = `
         <div class="rm-empty">
           <p>Wikis are stored as completely separate git repositories and cannot be fetched directly via the REST API.</p>
-          <a class="abtn abtn-m" href="https://github.com/${currentModalRepo}/wiki" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Wiki on GitHub</a>
+          <a class="abtn" href="https://github.com/${currentModalRepo}/wiki" target="_blank" style="font-size:.85rem;padding:8px 16px;">↗ Jump to Wiki on GitHub</a>
         </div>
       `;
     }
@@ -796,7 +938,9 @@ async function loadRepoTab(tab) {
 ═══════════════════════════════════════════ */
 
 async function startFetch(useCache = true) {
-  const username = document.getElementById('uname-inp').value.trim();
+  const usernameInp = document.getElementById('uname-inp');
+  if (!usernameInp) return;
+  const username = usernameInp.value.trim();
   if (!username) return;
 
   if (!useCache) {
@@ -827,8 +971,7 @@ async function startFetch(useCache = true) {
 
   setCacheBadge('live', 'FETCHING…');
   showLoading('Connecting to GitHub…', 0);
-  document.getElementById('loading').classList.remove('hidden');
-
+  
   let page           = 1;
   let repos          = [];
   let wasRateLimited = false;
@@ -849,7 +992,7 @@ async function startFetch(useCache = true) {
         const wait  = reset
           ? `Reset at ${new Date(reset * 1000).toLocaleTimeString()}`
           : 'Try again in ~60s';
-        const token = localStorage.getItem('starmap_gh_token');
+        const token = getLocal('starmap_gh_token');
         errorMsg = `Rate limited (${repos.length} repos). ${!token ? 'Click 🔑 to add an API Token!' : wait}`;
         wasRateLimited = true;
         break outer;
@@ -945,17 +1088,9 @@ function showPartialWarning(username, cached) {
   }
   banner.innerHTML = `
     <span>⚠ Stored cache is <b>partial</b> (${cached.repos.length} repos, ${age} old) — likely from a previous rate-limit.</span>
-    <button onclick="startFetch(false)" style="
-      background:transparent;border:1px solid #ffd600;color:#ffd600;
-      font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:4px 10px;cursor:pointer;white-space:nowrap;
-    ">↺ Re-fetch now</button>
-    <button onclick="useCachedPartial()" style="
-      background:transparent;border:1px solid #505060;color:#707090;
-      font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:4px 10px;cursor:pointer;white-space:nowrap;
-    ">Use partial anyway</button>
-    <button onclick="dismissBanner()" style="
-      background:transparent;border:none;color:#505060;font-size:.9rem;cursor:pointer;padding:0 2px;
-    ">✕</button>
+    <button class="abtn" onclick="startFetch(false)">↺ Re-fetch now</button>
+    <button class="abtn" onclick="useCachedPartial()">Use partial anyway</button>
+    <button class="abtn" style="border:none;" onclick="dismissBanner()">✕</button>
   `;
 }
 
@@ -978,13 +1113,16 @@ function dismissBanner() {
 function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 
 function showLoading(msg, pct){
-  document.getElementById('loading').classList.remove('hidden');
+  const el = document.getElementById('loading');
+  if (el) el.classList.remove('hidden');
   setLoading(msg, pct);
 }
 
 function setLoading(msg, pct){
-  document.getElementById('ld-status').textContent = msg;
-  document.getElementById('ld-fill').style.width = pct + '%';
+  const st = document.getElementById('ld-status');
+  const fl = document.getElementById('ld-fill');
+  if (st) st.textContent = msg;
+  if (fl) fl.style.width = pct + '%';
 }
 
 /* ═══════════════════════════════════════════
@@ -1015,7 +1153,7 @@ function slimRepo(r) {
     fork:             r.fork      || false,
     is_template:      r.is_template || false,
     license:          r.license ? { spdx_id: r.license.spdx_id } : null,
-    owner:            r.owner    ? { login:   r.owner.login    } : null,
+    owner:            r.owner    ? { login: r.owner.login, avatar_url: r.owner.avatar_url } : null,
     parent:           r.parent   ? { full_name: r.parent.full_name, id: r.parent.id } : null,
     source:           r.source   ? { full_name: r.source.full_name, id: r.source.id } : null,
   };
@@ -1035,12 +1173,12 @@ function saveCache(username, repos, partial = false){
   console.log(`[cache] storing ${slim.length} repos, ~${KB} KB`);
 
   try {
-    localStorage.setItem(cacheKey(username), payload);
+    setLocal(cacheKey(username), payload);
     return true;
   } catch(e) {
     pruneOldCacheKeys();
     try {
-      localStorage.setItem(cacheKey(username), payload);
+      setLocal(cacheKey(username), payload);
       return true;
     } catch(e2) {
       console.warn('[cache] save failed even after pruning:', e2.message,
@@ -1052,11 +1190,11 @@ function saveCache(username, repos, partial = false){
 
 function loadCache(username){
   try {
-    const raw = localStorage.getItem(cacheKey(username));
+    const raw = getLocal(cacheKey(username));
     if (!raw) return null;
     const obj = JSON.parse(raw);
     if (Date.now() - obj.timestamp > CACHE_TTL) {
-      localStorage.removeItem(cacheKey(username));
+      rmLocal(cacheKey(username));
       return null;
     }
     return obj;
@@ -1064,21 +1202,20 @@ function loadCache(username){
 }
 
 function clearCache(username){
-  try { localStorage.removeItem(cacheKey(username)); } catch(e) {}
+  rmLocal(cacheKey(username));
 }
 
 function pruneOldCacheKeys(){
   try {
-    const repoPrefixes = ['starmap_cache_v1_','starmap_cache_v2_','starmap_cache_v3_','starmap_cache_v4_'];
+    const repoPrefixes = ['starmap_cache_v1_','starmap_cache_v2_','starmap_cache_v3_','starmap_cache_v4_','starmap_cache_v5_','starmap_cache_v6_','starmap_cache_v7_'];
     Object.keys(localStorage).forEach(k => {
       try {
         if (repoPrefixes.some(p => k.startsWith(p))) {
           const obj = JSON.parse(localStorage.getItem(k));
           if (!obj.timestamp || Date.now() - obj.timestamp > CACHE_TTL)
             localStorage.removeItem(k);
-          return;
         }
-      } catch(e) { localStorage.removeItem(k); }
+      } catch(e) {}
     });
   } catch(e) {}
 }
@@ -1098,7 +1235,7 @@ const ARCH_LABELS = {
 
 /* ─────── ARCHITECTURE DETECTION ─────── */
 function detectArchitectures(repo) {
-  const T = (repo.topics || []).map(t => t.toLowerCase());
+  const T = (repo.topics || []).map(t => (t||'').toLowerCase());
   const D = (repo.description || '').toLowerCase();
   const N = (repo.name || '').toLowerCase();
   const L = (repo.language || '').toLowerCase();
@@ -1146,20 +1283,16 @@ function detectArchitectures(repo) {
 
 /* ─────── PLATFORM DETECTION ─────── */
 function detectPlatforms(repo) {
-  const T = (repo.topics || []).map(t => t.toLowerCase());
+  const T = (repo.topics || []).map(t => (t||'').toLowerCase());
   const D = (repo.description || '').toLowerCase();
   const N = (repo.name || '').toLowerCase();
   const src = D + ' ' + N + ' ' + T.join(' ');
   const plats = new Set();
 
   if (/\b(windows|win32|win64|\.exe|\.msi|winget|chocolatey|wpf|winforms)\b/.test(src)) plats.add('windows');
-  
   if (/\b(macos|mac os x?|osx|darwin|\.dmg|\.pkg|homebrew|brew install|apple silicon)\b/.test(src)) plats.add('macos');
-  
   if (/\b(linux|ubuntu|debian|archlinux|arch linux|fedora|\.deb|\.rpm|\.appimage|flatpak|snapcraft|snap install|aur)\b/.test(src)) plats.add('linux');
-  
   if (/\b(android|\.apk|f-droid|termux)\b/.test(src)) plats.add('android');
-  
   if (/\b(ios|iphone|ipad|app store)\b/.test(src)) plats.add('ios');
 
   if (/\b(electron|tauri|flutter|react native|multiplatform|cross-platform)\b/.test(src)) {
@@ -1174,299 +1307,12 @@ function detectPlatforms(repo) {
 /* ═══════════════════════════════════════════
    DATA ENRICHMENT
 ═══════════════════════════════════════════ */
-const KNOWN_REPOS = (() => {
-  const A_ALL    = ['x86_64','arm64','arm32'];
-  const A_X64ARM = ['x86_64','arm64'];
-  const A_X64    = ['x86_64'];
-  const A_UNI    = ['universal'];
-
-  const db = {
-    'alacritty/alacritty':         { archs:A_X64ARM },
-    'kovidgoyal/kitty':            { archs:A_X64ARM },
-    'wez/wezterm':                 { archs:A_X64ARM },
-    'ghostty-org/ghostty':         { archs:A_X64ARM },
-    'mitchellh/ghostty':           { archs:A_X64ARM },
-    'foot-terminal/foot':          { archs:A_X64ARM },
-    'contour-terminal/contour':    { archs:A_X64ARM },
-    'rio-terminal/rio':            { archs:A_X64ARM },
-    'sedwards/seq66':              { archs:A_X64 },
-    'tmux/tmux':                   { archs:A_X64ARM },
-    'zellij-org/zellij':           { archs:A_X64ARM },
-    'nicm/tmux':                   { archs:A_X64ARM },
-    'fish-shell/fish-shell':       { archs:A_X64ARM },
-    'zsh-users/zsh':               { archs:A_X64ARM },
-    'nushell/nushell':             { archs:A_X64ARM },
-    'elves/elvish':                { archs:A_X64ARM },
-    'ohmyzsh/ohmyzsh':             { archs:A_UNI },
-    'romkatv/powerlevel10k':       { archs:A_UNI },
-    'starship/starship':           { archs:A_X64ARM },
-    'sindresorhus/pure':           { archs:A_UNI },
-    'zap-zsh/zap':                 { archs:A_UNI },
-    'zplug/zplug':                 { archs:A_UNI },
-    'neovim/neovim':               { archs:A_X64ARM },
-    'vim/vim':                     { archs:A_X64ARM },
-    'helix-editor/helix':          { archs:A_X64ARM },
-    'lapce/lapce':                 { archs:A_X64ARM },
-    'zed-industries/zed':          { archs:A_X64ARM },
-    'emacs-mirror/emacs':          { archs:A_X64ARM },
-    'kakoune/kakoune':             { archs:A_X64ARM },
-    'mawww/kakoune':               { archs:A_X64ARM },
-    'micro-editor/micro':          { archs:A_ALL    },
-    'xi-editor/xi-editor':         { archs:A_X64ARM },
-    'nvchad/nvchad':               { archs:A_UNI },
-    'lazyvim/lazyvim':             { archs:A_UNI },
-    'ayamir/nvimdots':             { archs:A_UNI },
-    'astronvim/astronvim':         { archs:A_UNI },
-    'lunarvim/lunarvim':           { archs:A_UNI },
-    'folke/lazy.nvim':             { archs:A_UNI },
-    'folke/tokyonight.nvim':       { archs:A_UNI },
-    'nvim-telescope/telescope.nvim': { archs:A_UNI },
-    'nvim-treesitter/nvim-treesitter': { archs:A_UNI },
-    'neovim/nvim-lspconfig':       { archs:A_UNI },
-    'hrsh7th/nvim-cmp':            { archs:A_UNI },
-    'williamboman/mason.nvim':     { archs:A_UNI },
-    'nvim-lualine/lualine.nvim':   { archs:A_UNI },
-    'catppuccin/nvim':             { archs:A_UNI },
-    'lewis6991/gitsigns.nvim':     { archs:A_UNI },
-    'akinsho/bufferline.nvim':     { archs:A_UNI },
-    'kyazdani42/nvim-tree.lua':    { archs:A_UNI },
-    'hyprwm/hyprland':             { archs:A_X64ARM },
-    'swaywm/sway':                 { archs:A_X64ARM },
-    'i3/i3':                       { archs:A_X64ARM },
-    'baskerville/xmobar':          { archs:A_X64    },
-    'polybar/polybar':             { archs:A_X64ARM },
-    'elkowar/eww':                 { archs:A_X64ARM },
-    'Alexays/Waybar':              { archs:A_X64ARM },
-    'dunst-project/dunst':         { archs:A_X64ARM },
-    'emersion/mako':               { archs:A_X64ARM },
-    'Mottie/rofi':                 { archs:A_X64ARM },
-    'davatorium/rofi':             { archs:A_X64ARM },
-    'lbonn/rofi':                  { archs:A_X64ARM },
-    'baskerville/bspwm':           { archs:A_X64    },
-    'qtile/qtile':                 { archs:A_X64ARM },
-    'leftwm/leftwm':               { archs:A_X64ARM },
-    'riverwm/river':               { archs:A_X64ARM },
-    'nwg-piotr/nwg-shell':         { archs:A_X64ARM },
-    'swaylock-effects/swaylock':   { archs:A_X64ARM },
-    'nicowillis/swaylock-effects': { archs:A_X64ARM },
-    'ranger/ranger':               { archs:A_UNI    },
-    'sxyazi/yazi':                 { archs:A_X64ARM },
-    'jarun/nnn':                   { archs:A_X64ARM },
-    'gokcehan/lf':                 { archs:A_ALL    },
-    'vifm/vifm':                   { archs:A_X64ARM },
-    'nicowillis/felix':            { archs:A_X64ARM },
-    'nicowillis/midnight-commander':{ archs:A_X64ARM },
-    'MidnightCommander/mc':        { archs:A_X64ARM },
-    'htop-dev/htop':               { archs:A_X64ARM },
-    'aristocratos/btop':           { archs:A_X64ARM },
-    'nicolargo/glances':           { archs:A_X64ARM },
-    'aksakalli/gtop':              { archs:A_X64ARM },
-    'bvaisvil/zenith':             { archs:A_X64ARM },
-    'ClementTsang/bottom':         { archs:A_ALL    },
-    'muesli/cava':                 { archs:A_X64ARM },
-    'karlstav/cava':               { archs:A_X64ARM },
-    'junegunn/fzf':                { archs:A_X64ARM },
-    'ajeetdsouza/zoxide':          { archs:A_X64ARM },
-    'sharkdp/fd':                  { archs:A_X64ARM },
-    'burntsushi/ripgrep':          { archs:A_X64ARM },
-    'phiresky/ripgrep-all':        { archs:A_X64ARM },
-    'mptre/yank':                  { archs:A_X64ARM },
-    'eza-community/eza':           { archs:A_X64ARM },
-    'ogham/exa':                   { archs:A_X64ARM },
-    'lsd-rs/lsd':                  { archs:A_X64ARM },
-    'sharkdp/bat':                 { archs:A_X64ARM },
-    'junegunn/bat':                { archs:A_X64ARM },
-    'chmln/sd':                    { archs:A_X64ARM },
-    'sift-binary/sift':            { archs:A_X64ARM },
-    'ggreer/the_silver_searcher':  { archs:A_X64ARM },
-    'extrawurst/gitui':            { archs:A_X64ARM },
-    'jesseduffield/lazygit':       { archs:A_X64ARM },
-    'github/gitignore':            { archs:[] },
-    'so-fancy/diff-so-fancy':      { archs:A_UNI    },
-    'dandavison/delta':            { archs:A_X64ARM },
-    'charmbracelet/soft-serve':    { archs:A_X64ARM },
-    'nicowillis/onefetch':         { archs:A_X64ARM },
-    'o2sh/onefetch':               { archs:A_X64ARM },
-    'nicowillis/paru':             { archs:A_X64ARM },
-    'morganamilo/paru':            { archs:A_X64ARM },
-    'jguer/yay':                   { archs:A_X64ARM },
-    'nicowillis/pikaur':           { archs:A_X64ARM },
-    'nix-community/home-manager':  { archs:A_X64ARM },
-    'NixOS/nixpkgs':               { archs:A_UNI },
-    'nix-community/nix-index':     { archs:A_X64ARM },
-    'nicowillis/flatpak':          { archs:A_X64ARM },
-    'flatpak/flatpak':             { archs:A_X64ARM },
-    'ryanoasis/nerd-fonts':        { archs:A_UNI },
-    'tonsky/firacode':             { archs:A_UNI },
-    'belluzj/fantasque-sans-mono': { archs:A_UNI },
-    'microsoft/cascadia-code':     { archs:A_UNI    },
-    'jdKotlinHello/jetbrains-mono':{ archs:A_UNI },
-    'JetBrains/JetBrainsMono':     { archs:A_UNI    },
-    'be5invis/iosevka':            { archs:A_UNI    },
-    'googlefonts/noto-fonts':      { archs:A_UNI },
-    'googlefonts/roboto':          { archs:A_UNI },
-    'source-foundry/hack':         { archs:A_UNI    },
-    'nicowillis/victor-mono':      { archs:A_UNI },
-    'rubjo/victor-mono':           { archs:A_UNI    },
-    'catppuccin/catppuccin':       { archs:A_UNI },
-    'folke/tokyonight.nvim':       { archs:A_UNI },
-    'rose-pine/neovim':            { archs:A_UNI },
-    'ellisonleao/gruvbox.nvim':    { archs:A_UNI },
-    'sainnhe/gruvbox-material':    { archs:A_UNI },
-    'joshdick/onedark.vim':        { archs:A_UNI },
-    'sonph/onehalf':               { archs:A_UNI },
-    'arcticicestudio/nord-vim':    { archs:A_UNI },
-    'drewtempelmeyer/palenight.vim': { archs:A_UNI },
-    'nicowillis/neofetch':         { archs:A_UNI    },
-    'dylanaraps/neofetch':         { archs:A_UNI    },
-    'chick2d/neofetch':            { archs:A_UNI },
-    'nicowillis/fastfetch':        { archs:A_X64ARM },
-    'fastfetch-cli/fastfetch':     { archs:A_X64ARM },
-    'unixorn/screenfetch':         { archs:A_UNI    },
-    'nicowillis/hyfetch':          { archs:A_UNI    },
-    'hykilpikonna/hyfetch':        { archs:A_UNI    },
-    'obsidianmd/obsidian-releases':{ archs:A_X64ARM },
-    'joplin/joplin':               { archs:A_X64ARM },
-    'marktext/marktext':           { archs:A_X64ARM },
-    'standardnotes/app':           { archs:A_X64ARM },
-    'nicowillis/logseq':           { archs:A_X64ARM },
-    'logseq/logseq':               { archs:A_X64ARM },
-    'nicowillis/appflowy':         { archs:A_X64ARM },
-    'appflowy-io/appflowy':        { archs:A_X64ARM },
-    'zen-browser/zen-browser':     { archs:A_X64ARM },
-    'mozilla/firefox':             { archs:A_X64ARM },
-    'brave/brave-browser':         { archs:A_X64ARM },
-    'nicowillis/vivaldi':          { archs:A_X64ARM },
-    'nicowillis/librewolf':        { archs:A_X64ARM },
-    'bitwarden/clients':           { archs:A_X64ARM },
-    'keepassxreboot/keepassxc':    { archs:A_X64ARM },
-    'buttercup/buttercup-desktop': { archs:A_X64ARM },
-    'nicowillis/bitwarden':        { archs:A_X64ARM },
-    'nicowillis/pass':             { archs:A_UNI    },
-    'zx2c4/password-store':        { archs:A_UNI    },
-    'nicowillis/gopass':           { archs:A_X64ARM },
-    'gopasspw/gopass':             { archs:A_X64ARM },
-    'nicowillis/nsxiv':            { archs:A_X64ARM },
-    'nicowillis/sxiv':             { archs:A_X64ARM },
-    'nicowillis/feh':              { archs:A_X64ARM },
-    'derf/feh':                    { archs:A_X64ARM },
-    'nicowillis/imv':              { archs:A_X64ARM },
-    'nicowillis/vimiv-qt':         { archs:A_X64ARM },
-    'karlch/vimiv-qt':             { archs:A_X64ARM },
-    'mpv-player/mpv':              { archs:A_X64ARM },
-    'nicowillis/vlc':              { archs:A_X64ARM },
-    'vlc-mediaplayer/vlc':         { archs:A_X64ARM },
-    'cmus/cmus':                   { archs:A_X64ARM },
-    'nicowillis/moc':              { archs:A_X64ARM },
-    'nicowillis/musikcube':        { archs:A_X64ARM },
-    'clangen/musikcube':           { archs:A_X64ARM },
-    'nicowillis/curl':             { archs:A_X64ARM },
-    'curl/curl':                   { archs:A_X64ARM },
-    'httpie/cli':                  { archs:A_UNI    },
-    'nicowillis/httpie':           { archs:A_UNI    },
-    'nicowillis/hurl':             { archs:A_X64ARM },
-    'orange-lang/hurl':            { archs:A_X64ARM },
-    'nicowillis/xh':               { archs:A_X64ARM },
-    'ducaale/xh':                  { archs:A_X64ARM },
-    'nicowillis/nmap':             { archs:A_X64ARM },
-    'nmap/nmap':                   { archs:A_X64ARM },
-    'nicowillis/gping':            { archs:A_X64ARM },
-    'orf/gping':                   { archs:A_X64ARM },
-    'nicowillis/bandwhich':        { archs:A_X64ARM },
-    'imsnif/bandwhich':            { archs:A_X64ARM },
-    'nicowillis/wireguard':        { archs:A_X64ARM },
-    'nicowillis/tailscale':        { archs:A_X64ARM },
-    'tailscale/tailscale':         { archs:A_X64ARM },
-    'nicowillis/tldr':             { archs:A_UNI    },
-    'tldr-pages/tldr':             { archs:A_UNI    },
-    'nicowillis/jq':               { archs:A_X64ARM },
-    'jqlang/jq':                   { archs:A_X64ARM },
-    'nicowillis/yq':               { archs:A_X64ARM },
-    'mikefarah/yq':                { archs:A_X64ARM },
-    'nicowillis/gdu':              { archs:A_X64ARM },
-    'dundee/gdu':                  { archs:A_X64ARM },
-    'nicowillis/dust':             { archs:A_X64ARM },
-    'bootandy/dust':               { archs:A_X64ARM },
-    'muesli/duf':                  { archs:A_X64ARM },
-    'nicowillis/procs':            { archs:A_X64ARM },
-    'dalance/procs':               { archs:A_X64ARM },
-    'nicowillis/tokei':            { archs:A_X64ARM },
-    'xampprocky/tokei':            { archs:A_X64ARM },
-    'nicowillis/choose':           { archs:A_X64ARM },
-    'theryangeary/choose':         { archs:A_X64ARM },
-    'nicowillis/vivid':            { archs:A_X64ARM },
-    'sharkdp/vivid':               { archs:A_X64ARM },
-    'nicowillis/hyperfine':        { archs:A_X64ARM },
-    'sharkdp/hyperfine':           { archs:A_X64ARM },
-    'sharkdp/insect':              { archs:A_UNI    },
-    'nicowillis/docker':           { archs:A_X64ARM },
-    'nicowillis/podman':           { archs:A_X64ARM },
-    'containers/podman':           { archs:A_X64ARM },
-    'nicowillis/lazydocker':       { archs:A_X64ARM },
-    'jesseduffield/lazydocker':    { archs:A_X64ARM },
-    'nicowillis/dive':             { archs:A_X64ARM },
-    'wagoodman/dive':              { archs:A_X64ARM },
-    'nicowillis/k9s':              { archs:A_X64ARM },
-    'derailed/k9s':                { archs:A_X64ARM },
-    'awesome-lists/awesome':       { archs:[] },
-    'sindresorhus/awesome':        { archs:[] },
-    'nicowillis/awesome-linux':    { archs:[] },
-    'nicowillis/awesome-selfhosted': { archs:[] },
-    'awesome-selfhosted/awesome-selfhosted': { archs:[] },
-    'nicowillis/awesome-dotfiles': { archs:[] },
-    'nicowillis/the-book-of-secret-knowledge': { archs:[] },
-    'trimstray/the-book-of-secret-knowledge':  { archs:[] },
-    'nicowillis/public-apis':      { archs:[] },
-    'public-apis/public-apis':     { archs:[] },
-    'nicowillis/free-for-dev':     { archs:[] },
-    'ripienaar/free-for-dev':      { archs:[] },
-    'nicowillis/build-your-own-x': { archs:[] },
-    'codecrafters-io/build-your-own-x': { archs:[] },
-    'nicowillis/dotfiles':         { archs:A_UNI },
-    'nicowillis/dotfiles-public':  { archs:A_UNI },
-    'termux/termux-app':           { archs:A_X64ARM },
-    'termux/termux-packages':      { archs:A_X64ARM },
-    'nicowillis/termux-tools':     { archs:A_X64ARM },
-    'f-droid/fdroidclient':        { archs:A_X64ARM },
-    'nicowillis/grim':             { archs:A_X64ARM },
-    'nicowillis/slurp':            { archs:A_X64ARM },
-    'nicowillis/wl-clipboard':     { archs:A_X64ARM },
-    'bugaevc/wl-clipboard':        { archs:A_X64ARM },
-    'nicowillis/xdg-desktop-portal': { archs:A_X64ARM },
-    'nicowillis/kanshi':           { archs:A_X64ARM },
-    'emersion/kanshi':             { archs:A_X64ARM },
-    'nicowillis/wayshot':          { archs:A_X64ARM },
-  };
-
-  const byName = {};
-  for (const [k,v] of Object.entries(db)) {
-    const name = k.split('/')[1];
-    if (name && !byName[name]) byName[name] = v;
-  }
-
-  return { byFullName: db, byName };
-})();
-
-function _applyKnownRepoData(repo, r) {
-  const key   = (r.full_name || '').toLowerCase();
-  const name  = (r.name || '').toLowerCase();
-  const match = KNOWN_REPOS.byFullName[key] || KNOWN_REPOS.byName[name];
-  if (!match) return;
-
-  if (match.archs?.length) {
-    const s = new Set([...(r._archs||[]),...match.archs]);
-    r._archs = [...s];
-  }
-}
-
 function enrichAll(repos){
   return repos.map(r => {
     r._tags        = inferTags(r);
     r._moved       = detectMovedUrl(r);
     r._archs       = detectArchitectures(r);
     r._platforms   = detectPlatforms(r);
-
-    _applyKnownRepoData(r, r);
     return r;
   });
 }
@@ -1508,12 +1354,18 @@ function detectMovedUrl(repo){
 ═══════════════════════════════════════════ */
 function buildFilters(){
   // Preserve scroll states to stop annoying jumping when clicking filters
+  const domLangList = document.getElementById('lang-list');
+  const domTagList = document.getElementById('tag-list');
+  const domLicList = document.getElementById('lic-list');
+  const domArch2List = document.getElementById('arch2-list');
+  const domPlatList = document.getElementById('plat-list');
+
   const scrollStates = {
-    lang: document.getElementById('lang-list').scrollTop,
-    tag: document.getElementById('tag-list').scrollTop,
-    lic: document.getElementById('lic-list').scrollTop,
-    arch2: document.getElementById('arch2-list').scrollTop,
-    plat: document.getElementById('plat-list').scrollTop
+    lang: domLangList ? domLangList.scrollTop : 0,
+    tag: domTagList ? domTagList.scrollTop : 0,
+    lic: domLicList ? domLicList.scrollTop : 0,
+    arch2: domArch2List ? domArch2List.scrollTop : 0,
+    plat: domPlatList ? domPlatList.scrollTop : 0
   };
 
   const langCounts  = {};
@@ -1546,11 +1398,11 @@ function buildFilters(){
   buildCheckList('arch2-list', archCounts,  activeArchFilter,  'arch2', ARCH_LABELS);
 
   // Restore scrolls
-  document.getElementById('lang-list').scrollTop = scrollStates.lang;
-  document.getElementById('tag-list').scrollTop = scrollStates.tag;
-  document.getElementById('lic-list').scrollTop = scrollStates.lic;
-  document.getElementById('arch2-list').scrollTop = scrollStates.arch2;
-  document.getElementById('plat-list').scrollTop = scrollStates.plat;
+  if (domLangList) domLangList.scrollTop = scrollStates.lang;
+  if (domTagList) domTagList.scrollTop = scrollStates.tag;
+  if (domLicList) domLicList.scrollTop = scrollStates.lic;
+  if (domArch2List) domArch2List.scrollTop = scrollStates.arch2;
+  if (domPlatList) domPlatList.scrollTop = scrollStates.plat;
 
   if (archCnt > 0) document.getElementById('arch-stat').style.display='';
   document.getElementById('archived-cnt').textContent = archCnt;
@@ -1559,6 +1411,7 @@ function buildFilters(){
 function buildCheckList(containerId, counts, activeMap, filterType, labelMap){
   const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
   const container = document.getElementById(containerId);
+  if (!container) return;
   container.innerHTML = sorted.map(([val, cnt]) => {
     const label = labelMap?.[val] || val;
     const state = activeMap.get(val) || 0;
@@ -1576,7 +1429,9 @@ function buildCheckList(containerId, counts, activeMap, filterType, labelMap){
 function filterSbList(type){
   const map = {lang:'lang-list',tag:'tag-list'};
   const searchId = {lang:'lang-search',tag:'tag-search'};
-  const q = document.getElementById(searchId[type]).value.toLowerCase();
+  const srch = document.getElementById(searchId[type]);
+  if (!srch) return;
+  const q = srch.value.toLowerCase();
   const items = document.getElementById(map[type]).querySelectorAll('.fl-item');
   items.forEach(item => {
     const text = item.textContent.toLowerCase();
@@ -1656,15 +1511,15 @@ function applyFilters(){
     if (activeLangFilter.size > 0){
       const l = r.language || '(none)';
       for (const [lang, state] of activeLangFilter.entries()) {
-        if (state === 1 && l !== lang) return false; // Must be this language
-        if (state === -1 && l === lang) return false; // Must NOT be this language
+        if (state === 1 && l !== lang) return false; 
+        if (state === -1 && l === lang) return false; 
       }
     }
     if (activeTagFilter.size > 0){
       const rt = new Set([...(r._tags||[]),...(r.topics||[])]);
       for (const [t, state] of activeTagFilter.entries()) {
-        if (state === 1 && !rt.has(t)) return false; // Required tag missing
-        if (state === -1 && rt.has(t)) return false; // Excluded tag present
+        if (state === 1 && !rt.has(t)) return false; 
+        if (state === -1 && rt.has(t)) return false; 
       }
     }
     if (activePlatFilter.size > 0){
@@ -1835,11 +1690,11 @@ window.toggleTags = function(id) {
   if (btn.dataset.expanded === 'true') {
     hiddenTags.forEach(t => t.style.display = 'none');
     btn.dataset.expanded = 'false';
-    btn.textContent = `▼ Show ${hiddenTags.length} more tags`;
+    btn.innerHTML = `▼ Show ${hiddenTags.length} more tags`;
   } else {
     hiddenTags.forEach(t => t.style.display = 'inline-block');
     btn.dataset.expanded = 'true';
-    btn.textContent = '▲ Show less';
+    btn.innerHTML = '▲ Show less';
   }
 };
 
@@ -1891,7 +1746,7 @@ function buildCard(repo, idx){
     tagsMarkup = `
       <div class="tags-wrapper">
         <div class="tags-row" id="tc-${repo.id}">${tagHtml}</div>
-        ${allTags.length > VISIBLE_LIMIT ? `<button class="tags-expander" id="btn-${repo.id}" data-expanded="false" onclick="toggleTags('${repo.id}')">▼ Show ${allTags.length - VISIBLE_LIMIT} more tags</button>` : ''}
+        ${allTags.length > VISIBLE_LIMIT ? `<button class="abtn tags-expander" id="btn-${repo.id}" data-expanded="false" onclick="toggleTags('${repo.id}')">▼ Show ${allTags.length - VISIBLE_LIMIT} more tags</button>` : ''}
       </div>
     `;
   }
@@ -1916,16 +1771,28 @@ function buildCard(repo, idx){
   const mvLink   = movedUrl
     ? `<a class="abtn abtn-m" href="${movedUrl}" target="_blank">➜ New Home</a>` : '';
 
+  const avatarUrl = repo.owner && repo.owner.avatar_url ? repo.owner.avatar_url : 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+  const ownerName = repo.owner ? repo.owner.login : repo.full_name.split('/')[0];
+
   el.innerHTML = `
-    <div class="rc-owner">${esc(repo.full_name.split('/')[0])}</div>
-    <div class="rc-head">
-      <span class="rc-name" onclick="openRepoModal('${repo.full_name}', 'readme')" title="Open Deep Dive Modal">${esc(repo.name)}</span>
-      ${badges}
+    <div class="rc-content">
+      <div class="rc-top-row">
+        <div class="rc-avatar-wrap">
+          <img src="${avatarUrl}" class="rc-avatar" alt="Avatar">
+        </div>
+        <div class="rc-title-area">
+          <div class="rc-owner">${esc(ownerName)}</div>
+          <div class="rc-head">
+            <span class="rc-name" onclick="openRepoModal('${repo.full_name}', 'readme')" title="Open Deep Dive Modal">${esc(repo.name)}</span>
+            ${badges}
+          </div>
+        </div>
+      </div>
+      ${repo.description ? `<div class="rc-desc">${esc(repo.description)}</div>` : ''}
+      <div class="rc-stats">${statsHtml}</div>
+      ${tagsMarkup}
+      <div class="rc-actions">${ghLink}${hpLink}${mvLink}</div>
     </div>
-    ${repo.description ? `<div class="rc-desc">${esc(repo.description)}</div>` : ''}
-    <div class="rc-stats">${statsHtml}</div>
-    ${tagsMarkup}
-    <div class="rc-actions">${ghLink}${hpLink}${mvLink}</div>
   `;
   return el;
 }
@@ -1944,14 +1811,17 @@ function getTagClass(tag){
 ═══════════════════════════════════════════ */
 window.addEventListener('DOMContentLoaded', () => {
   // Initialize the key icon state on load
-  updateKeyIcon(!!localStorage.getItem('starmap_gh_token'));
+  updateKeyIcon(!!getLocal('starmap_gh_token'));
   
   startFetch(true);
 
   setInterval(() => {
-    const username = document.getElementById('uname-inp').value.trim();
-    const cached = loadCache(username);
-    if (!cached || cached.partial) startFetch(false);
+    const usernameInp = document.getElementById('uname-inp');
+    if (usernameInp) {
+      const username = usernameInp.value.trim();
+      const cached = loadCache(username);
+      if (!cached || cached.partial) startFetch(false);
+    }
   }, 60 * 60 * 1000);
 });
 </script>
