@@ -17,7 +17,7 @@
   --cyan:     #00e5ff;
   --cyanD:    #00b0cc;
   --mag:      #ff0090;
-  --yel:      #ffd600;
+  --yel:      #c7bf00;
   --grn:      #00ff88;
   --red:      #ff3355;
   --text:     #b8c8dc;
@@ -59,7 +59,7 @@ body::after{
 }
 select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 
-/* ── HOLLOW GEOMETRIC BUTTONS ── */
+/* ── HOLLOW GEOMETRIC BUTTONS (Perfect Inversion) ── */
 .btn, .abtn {
   position: relative; background: transparent; border: none; z-index: 1; cursor: pointer;
   font-family: 'JetBrains Mono', monospace; transition: filter .2s, color .2s;
@@ -67,6 +67,9 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 }
 .btn { padding: 7px 14px; font-size: .72rem; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
 .abtn { padding: 4px 8px; font-size: .62rem; color: var(--textD); gap: 3px; }
+
+/* Hover Click Animation */
+.btn:active, .abtn:active, .vbtn:active { transform: scale(0.96); }
 
 .btn::before, .abtn::before {
   content: ''; position: absolute; inset: 0; z-index: -2; transition: all .2s;
@@ -82,28 +85,23 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .abtn::after { clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); background: var(--card); }
 .btn::after { background: var(--bg); }
 
-/* Hover States */
-.btn:hover { color: #fff; filter: drop-shadow(0 0 8px rgba(0,229,255,0.4)); }
-.btn:hover::before { background: var(--cyanD); }
-.btn:hover::after { background: rgba(0,229,255,0.1); }
+/* Hover States - Full Inversion */
+.btn:hover { color: var(--bg); font-weight: 700; filter: drop-shadow(0 0 8px rgba(0,229,255,0.4)); }
+.btn:hover::after { background: var(--cyan); }
 
-/* FIX: abtn hover — ::after was rgba(0,229,255,.07) which composites over solid-cyan ::before
-   making the fill appear solid cyan; text is also var(--cyan) → invisible.
-   Changed to opaque var(--card) so accent color only shows at the 1px border. */
-.abtn:hover { color: var(--cyan); }
+.abtn:hover { color: var(--bg); font-weight: 700; }
 .abtn:hover::before { background: var(--cyan); }
-.abtn:hover::after { background: var(--card); }
+.abtn:hover::after { background: var(--cyan); }
 
 /* Magenta Button Variant */
 .btn-mag { color: var(--mag); }
 .btn-mag::before { background: var(--mag); }
-.btn-mag:hover { color: #fff; filter: drop-shadow(0 0 8px rgba(255,0,144,0.4)); }
-.btn-mag:hover::after { background: rgba(255,0,144,0.1); }
+.btn-mag:hover { color: var(--bg); font-weight: 700; filter: drop-shadow(0 0 8px rgba(255,0,144,0.4)); }
+.btn-mag:hover::after { background: var(--mag); }
 
-/* FIX: abtn-m hover — same issue as abtn but with magenta. */
-.abtn-m:hover { color: var(--mag); }
+.abtn-m:hover { color: var(--bg); font-weight: 700; }
 .abtn-m:hover::before { background: var(--mag); }
-.abtn-m:hover::after { background: var(--card); }
+.abtn-m:hover::after { background: var(--mag); }
 
 /* View toggle buttons */
 .vbtn { 
@@ -112,11 +110,9 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 }
 .vbtn::before { content: ''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s; }
 .vbtn::after { content: ''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .2s; }
-/* FIX: vbtn.on::after was rgba(0,229,255,.07) — composited over solid-cyan ::before = near-solid
-   cyan fill; icon color is var(--cyan) = same → invisible. Fixed to opaque var(--bg2). */
-.vbtn.on { color: var(--cyan); }
-.vbtn.on::before { background: var(--cyan); }
-.vbtn.on::after { background: var(--bg2); }
+.vbtn.on, .vbtn:hover { color: var(--bg); font-weight: 700; }
+.vbtn.on::before, .vbtn:hover::before { background: var(--cyan); }
+.vbtn.on::after, .vbtn:hover::after { background: var(--cyan); }
 
 /* ── HEADER ─────────────────────────────────── */
 #hdr{
@@ -190,8 +186,8 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
   text-transform:uppercase;white-space:nowrap; transition:all .2s;
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
-.rm-tab:hover { color:var(--textB); background: var(--bg4); }
-.rm-tab.active { color:var(--bg2); background: var(--cyan); font-weight: bold; }
+.rm-tab:hover { color:var(--bg); background: var(--cyan); font-weight: 700; }
+.rm-tab.active { color:var(--bg); background: var(--cyan); font-weight: bold; }
 
 .rm-content { flex:1;overflow-y:auto;padding:20px;background:var(--bg);position:relative; }
 .rm-loading, .rm-empty { text-align:center;padding:60px 20px;color:var(--textD);font-size:.85rem;line-height:1.6; }
@@ -223,16 +219,15 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .rmi-title-wrap { display:flex;flex-direction:column;gap:6px;flex:1; }
 .rmi-title-row { display:flex;align-items:center;gap:8px;flex-wrap:wrap; }
 
+/* Status Badges - Fixed Contrast */
 .rmi-status { 
   font-family:'JetBrains Mono', monospace; font-size:.6rem; padding:3px 7px; text-transform:uppercase; 
-  font-weight:bold; letter-spacing:1px; flex-shrink:0; position: relative; z-index: 1; color: var(--bg);
+  font-weight:bold; letter-spacing:1px; flex-shrink:0; position: relative; z-index: 1; 
+  background: var(--c); color: var(--bg);
+  clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
 }
-.rmi-status::before { content:''; position:absolute; inset:0; background: var(--c); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); }
-.rmi-status::after { content:''; position:absolute; inset:1px; background: var(--bg); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); }
 .rmi-status.open { --c: var(--grn); }
-.rmi-status.open::after { background: rgba(0,255,136,0.1); }
 .rmi-status.draft { --c: var(--textD); }
-.rmi-status.draft::after { background: rgba(80,96,122,0.1); }
 
 .rmi-title { font-size:.95rem;font-weight:600;line-height:1.4; font-family:'Oxanium', sans-serif; }
 .rmi-title a { color:var(--textB);text-decoration:none; }
@@ -304,25 +299,24 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 .range-labels{display:flex;justify-content:space-between;font-size:.6rem;color:var(--textD);margin-top:2px;}
 
-/* 3-State Checkbox */
+/* 3-State Checkbox - Fixed Symbol Contrast */
 .cb {
   display:inline-flex; align-items:center; justify-content:center; position: relative;
-  width:14px; height:14px; flex-shrink:0; font-size:9px; font-weight:bold; color:transparent; z-index: 1; margin-right: 2px;
+  width:14px; height:14px; flex-shrink:0; font-size:10px; font-weight:900; 
+  z-index: 2; margin-right: 2px; cursor: pointer;
+  color: var(--borderB); 
+  transition: all .15s;
 }
 .cb::before { content:''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: all .15s;}
 .cb::after { content:''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: all .15s;}
 
-/* FIX: cb.on::after was rgba(0,229,255,.15) — semi-transparent cyan composited over solid-cyan
-   ::before makes the fill appear solid cyan; text is var(--cyan) → same color = invisible ✓.
-   Changed to opaque var(--bg2) so accent border shows only at 1px edge, text contrasts clearly. */
-.cb.on { color: var(--cyan); }
+.cb.on { color: var(--bg); }
 .cb.on::before { background: var(--cyan); }
-.cb.on::after { background: var(--bg2); }
+.cb.on::after { background: var(--cyan); }
 
-/* FIX: same problem for exc state — red text on near-solid red fill = invisible ✕. */
-.cb.exc { color: var(--red); }
+.cb.exc { color: var(--bg); }
 .cb.exc::before { background: var(--red); }
-.cb.exc::after { background: var(--bg2); }
+.cb.exc::after { background: var(--red); }
 
 
 /* ── STICKY TOP RAIL (sort + stats combined) ─── */
@@ -434,12 +428,14 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 }
 .rc-name:hover{color:var(--cyan);}
 
-/* Badges (Archived, Moved, etc) - Hollow Hex */
+/* Card Badges (Archived, Moved, Fork) */
 .badge {
-  position: relative; font-size: .55rem; padding: 2px 6px; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; z-index: 1; color: var(--c);
+  position: relative; font-size: .55rem; padding: 2px 6px; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; flex-shrink: 0; z-index: 1; color: var(--c); transition: color .2s; cursor: default;
 }
 .badge::before { content:''; position:absolute; inset:0; background: var(--c); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); }
-.badge::after { content:''; position:absolute; inset:1px; background: var(--card); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); }
+.badge::after { content:''; position:absolute; inset:1px; background: var(--card); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .2s; }
+.badge:hover { color: var(--card); font-weight: 700; }
+.badge:hover::after { background: var(--c); }
 .badge.ba { --c: var(--yel); }
 .badge.bm { --c: var(--mag); }
 .badge.bf { --c: var(--textD); }
@@ -463,20 +459,24 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 
 .tag {
   position: relative; display: inline-block; padding: 3px 7px; font-size: .58rem;
-  color: var(--t-col); cursor: pointer; letter-spacing: .3px; z-index: 1;
+  color: var(--t-col); cursor: pointer; letter-spacing: .3px; z-index: 1; transition: color .2s;
 }
-.tag::before { content: ''; position: absolute; inset: 0; background: var(--t-bg); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s;}
+.tag::before { content: ''; position: absolute; inset: 0; background: var(--t-col); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s;}
 .tag::after { content: ''; position: absolute; inset: 1px; background: var(--bg); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .15s; }
-.tag:hover::after, .tag.on::after { background: var(--t-h-bg); }
-.tag:hover, .tag.on { color: var(--t-col-hover); }
+
+.tag:hover, .tag.on { color: var(--bg); font-weight: 700; }
+.tag:hover::after, .tag.on::after { background: var(--t-col); }
 
 /* Tag Types */
-.tag { --t-col: var(--cyanD); --t-col-hover: var(--cyan); --t-bg: rgba(0,229,255,0.3); --t-h-bg: rgba(0,229,255,0.14); }
-.tag-p { --t-col: var(--yel); --t-col-hover: var(--yel); --t-bg: rgba(255,214,0,0.3); --t-h-bg: rgba(255,214,0,0.14); }
-.tag-a { --t-col: #ffba55; --t-col-hover: #ffba55; --t-bg: rgba(255,165,0,0.3); --t-h-bg: rgba(255,165,0,0.14); }
+.tag { --t-col: var(--cyanD); }
+.tag-p { --t-col: var(--yel); }
+.tag-a { --t-col: #ff6f00; }
 
 /* Negative "Exclude" State */
-.tag.exc { --t-col: var(--red) !important; --t-col-hover: var(--red) !important; --t-bg: var(--red) !important; --t-h-bg: rgba(255,51,85,.14) !important; text-decoration: line-through; }
+.tag.exc { --t-col: var(--red); color: var(--bg); text-decoration: line-through; }
+.tag.exc::after { background: var(--red); }
+.tag.exc:hover { color: var(--red); text-decoration: line-through; }
+.tag.exc:hover::after { background: var(--bg); }
 
 .rc-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:10px;}
 
@@ -526,8 +526,8 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
       <input class="inp hex-inner" id="uname-inp" type="text" placeholder="github username" value="sametaor">
     </div>
     <button class="btn" onclick="startFetch(true)">FETCH</button>
-    <button class="btn btn-mag" onclick="startFetch(false)" id="refresh-btn" title="Force refresh (bypass cache)">↺</button>
-    <button class="btn" id="key-btn" onclick="openTokenModal()" title="API Token Settings">🔑</button>
+    <button class="btn-mag btn" onclick="startFetch(false)" id="refresh-btn" title="Force refresh (bypass cache)">↺</button>
+    <button class="vbtn" id="key-btn" onclick="openTokenModal()" title="API Token Settings">🔑</button>
   </div>
   <div id="hdr-meta">Last updated: <b id="last-upd">—</b></div>
 </div>
@@ -673,7 +673,7 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
           <option value="open-issues">🐛 Open Issues</option>
         </select>
       </div>
-      <button id="dir-btn" onclick="toggleDir()" title="Toggle sort direction">↓</button>
+      <button class="vbtn" id="dir-btn" onclick="toggleDir()" title="Toggle sort direction">↓</button>
       <div class="sort-spacer"></div>
       <span class="sort-lbl">View:</span>
       <div class="view-tog">
@@ -1449,9 +1449,11 @@ function filterSbList(type){
   });
 }
 
-function cycleFilter(type, val){
+// Ensure cycleFilter properly checks global scope maps
+window.cycleFilter = function(type, val){
   const map = { lang:activeLangFilter, tag:activeTagFilter, plat:activePlatFilter,
                 lic:activeLicFilter, arch2:activeArchFilter }[type];
+  if (!map) return;
   const current = map.get(val) || 0;
   const next = current === 0 ? 1 : current === 1 ? -1 : 0;
   
@@ -1462,19 +1464,7 @@ function cycleFilter(type, val){
   buildFilters();
   if(type==='lang') filterSbList('lang');
   if(type==='tag') filterSbList('tag');
-}
-
-function toggleTagFilter(tag){
-  const current = activeTagFilter.get(tag) || 0;
-  const next = current === 0 ? 1 : current === 1 ? -1 : 0;
-  
-  if (next === 0) activeTagFilter.delete(tag);
-  else activeTagFilter.set(tag, next);
-  
-  applyFilters();
-  buildFilters();
-  filterSbList('tag'); // Restore search view if user is searching tags
-}
+};
 
 function clearFilter(type){
   const map = { lang:activeLangFilter, tag:activeTagFilter, plat:activePlatFilter,
@@ -1728,35 +1718,53 @@ function buildCard(repo, idx){
   const archs      = repo._archs || [];
   const plats      = repo._platforms || [];
 
-  const archLabels = archs.map(a => ARCH_LABELS[a] || a);
-  const platLabels = plats.map(p => PLATFORM_LABELS[p] || p);
-  
-  const allTags = [...new Set([...tags, ...topics, ...platLabels, ...archLabels])].filter(Boolean);
+  // Create an array mapping all possible tags to their filter types and actual values
+  const tagsArr = [];
+  tags.forEach(t => tagsArr.push({ val: t, label: t, type: 'tag' }));
+  topics.forEach(t => tagsArr.push({ val: t, label: t, type: 'tag' }));
+  plats.forEach(p => tagsArr.push({ val: p, label: PLATFORM_LABELS[p] || p, type: 'plat' }));
+  archs.forEach(a => tagsArr.push({ val: a, label: ARCH_LABELS[a] || a, type: 'arch2' }));
+
+  // Remove duplicates based on Display Label
+  const uniqueTags = [];
+  const seen = new Set();
+  tagsArr.forEach(t => {
+    if (t.label && !seen.has(t.label)) {
+      seen.add(t.label);
+      uniqueTags.push(t);
+    }
+  });
   
   // Sort tags so active filters (both included and excluded) float to the front
-  allTags.sort((a, b) => {
-    const stateA = Math.abs(activeTagFilter.get(a) || 0);
-    const stateB = Math.abs(activeTagFilter.get(b) || 0);
+  uniqueTags.sort((a, b) => {
+    const getMap = (type) => type === 'plat' ? activePlatFilter : type === 'arch2' ? activeArchFilter : activeTagFilter;
+    const stateA = Math.abs(getMap(a.type).get(a.val) || 0);
+    const stateB = Math.abs(getMap(b.type).get(b.val) || 0);
     if (stateA > stateB) return -1;
     if (stateA < stateB) return 1;
     return 0;
   });
 
   const VISIBLE_LIMIT = 8;
-  const tagHtml = allTags.map((t, i) => {
-    const cls   = getTagClass(t);
-    const state = activeTagFilter.get(t) || 0;
+  const tagHtml = uniqueTags.map((t, i) => {
+    let cls = '';
+    if (t.type === 'plat') cls = 'tag-p';
+    else if (t.type === 'arch2') cls = 'tag-a';
+    
+    const map = t.type === 'plat' ? activePlatFilter : t.type === 'arch2' ? activeArchFilter : activeTagFilter;
+    const state = map.get(t.val) || 0;
     const on    = state === 1 ? ' on' : state === -1 ? ' exc' : '';
     const hide  = i >= VISIBLE_LIMIT ? ' style="display:none;" data-hidden="true"' : '';
-    return `<span class="tag ${cls}${on}" onclick="toggleTagFilter('${esc(t)}')"${hide}>${esc(t)}</span>`;
+    
+    return `<span class="tag ${cls}${on}" onclick="cycleFilter('${t.type}', '${esc(t.val)}')"${hide}>${esc(t.label)}</span>`;
   }).join('');
 
   let tagsMarkup = '';
-  if (allTags.length > 0) {
+  if (uniqueTags.length > 0) {
     tagsMarkup = `
       <div class="tags-wrapper">
         <div class="tags-row" id="tc-${repo.id}">${tagHtml}</div>
-        ${allTags.length > VISIBLE_LIMIT ? `<button class="abtn tags-expander" id="btn-${repo.id}" data-expanded="false" onclick="toggleTags('${repo.id}')">▼ Show ${allTags.length - VISIBLE_LIMIT} more tags</button>` : ''}
+        ${uniqueTags.length > VISIBLE_LIMIT ? `<button class="abtn tags-expander" id="btn-${repo.id}" data-expanded="false" onclick="toggleTags('${repo.id}')">▼ Show ${uniqueTags.length - VISIBLE_LIMIT} more tags</button>` : ''}
       </div>
     `;
   }
@@ -1805,15 +1813,6 @@ function buildCard(repo, idx){
     </div>
   `;
   return el;
-}
-
-function getTagClass(tag){
-  const platLabels = Object.values(PLATFORM_LABELS);
-  const archLabels = Object.values(ARCH_LABELS);
-
-  if (platLabels.includes(tag)) return 'tag-p';
-  if (archLabels.includes(tag)) return 'tag-a';
-  return '';
 }
 
 /* ═══════════════════════════════════════════
