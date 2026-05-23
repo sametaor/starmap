@@ -87,9 +87,12 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .btn:hover::before { background: var(--cyanD); }
 .btn:hover::after { background: rgba(0,229,255,0.1); }
 
+/* FIX: abtn hover — ::after was rgba(0,229,255,.07) which composites over solid-cyan ::before
+   making the fill appear solid cyan; text is also var(--cyan) → invisible.
+   Changed to opaque var(--card) so accent color only shows at the 1px border. */
 .abtn:hover { color: var(--cyan); }
 .abtn:hover::before { background: var(--cyan); }
-.abtn:hover::after { background: rgba(0,229,255,0.07); }
+.abtn:hover::after { background: var(--card); }
 
 /* Magenta Button Variant */
 .btn-mag { color: var(--mag); }
@@ -97,9 +100,10 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .btn-mag:hover { color: #fff; filter: drop-shadow(0 0 8px rgba(255,0,144,0.4)); }
 .btn-mag:hover::after { background: rgba(255,0,144,0.1); }
 
+/* FIX: abtn-m hover — same issue as abtn but with magenta. */
 .abtn-m:hover { color: var(--mag); }
 .abtn-m:hover::before { background: var(--mag); }
-.abtn-m:hover::after { background: rgba(255,0,144,0.07); }
+.abtn-m:hover::after { background: var(--card); }
 
 /* View toggle buttons */
 .vbtn { 
@@ -108,9 +112,11 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 }
 .vbtn::before { content: ''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: background .2s; }
 .vbtn::after { content: ''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: background .2s; }
+/* FIX: vbtn.on::after was rgba(0,229,255,.07) — composited over solid-cyan ::before = near-solid
+   cyan fill; icon color is var(--cyan) = same → invisible. Fixed to opaque var(--bg2). */
 .vbtn.on { color: var(--cyan); }
 .vbtn.on::before { background: var(--cyan); }
-.vbtn.on::after { background: rgba(0,229,255,.07); }
+.vbtn.on::after { background: var(--bg2); }
 
 /* ── HEADER ─────────────────────────────────── */
 #hdr{
@@ -306,13 +312,17 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 .cb::before { content:''; position: absolute; inset: 0; background: var(--borderB); z-index: -2; clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px); transition: all .15s;}
 .cb::after { content:''; position: absolute; inset: 1px; background: var(--bg2); z-index: -1; clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px); transition: all .15s;}
 
+/* FIX: cb.on::after was rgba(0,229,255,.15) — semi-transparent cyan composited over solid-cyan
+   ::before makes the fill appear solid cyan; text is var(--cyan) → same color = invisible ✓.
+   Changed to opaque var(--bg2) so accent border shows only at 1px edge, text contrasts clearly. */
 .cb.on { color: var(--cyan); }
 .cb.on::before { background: var(--cyan); }
-.cb.on::after { background: rgba(0,229,255,.15); }
+.cb.on::after { background: var(--bg2); }
 
+/* FIX: same problem for exc state — red text on near-solid red fill = invisible ✕. */
 .cb.exc { color: var(--red); }
 .cb.exc::before { background: var(--red); }
-.cb.exc::after { background: rgba(255,51,85,.15); }
+.cb.exc::after { background: var(--bg2); }
 
 
 /* ── STICKY TOP RAIL (sort + stats combined) ─── */
