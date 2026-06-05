@@ -25,13 +25,15 @@
   --textB:    #ddeeff;
   --card:     #0a0a1e;
   --sw:       300px;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-nerd: 'CaskaydiaCove Nerd Font', 'CaskaydiaCove NF', 'Caskaydia Cove Nerd Font', sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:'JetBrains Mono',monospace;
+  font-family:var(--font-mono);
   min-height:100vh;
   overflow-x:hidden;
 }
@@ -54,7 +56,7 @@ body::after{
 .hex-wrap:focus-within { background: var(--cyan); }
 .hex-inner {
   flex: 1; border: none; outline: none; background: var(--bg3); color: var(--textB);
-  font-family: 'JetBrains Mono', monospace; font-size: .82rem; padding: 7px 11px;
+  font-family: var(--font-mono); font-size: .82rem; padding: 7px 11px;
   clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px);
 }
 select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
@@ -62,7 +64,7 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 /* ── HOLLOW GEOMETRIC BUTTONS (Perfect Inversion) ── */
 .btn, .abtn {
   position: relative; background: transparent; border: none; z-index: 1; cursor: pointer;
-  font-family: 'JetBrains Mono', monospace; transition: filter .2s, color .2s;
+  font-family: var(--font-mono); transition: filter .2s, color .2s;
   display: inline-flex; align-items: center; justify-content: center; text-decoration: none;
 }
 .btn { padding: 7px 14px; font-size: .72rem; color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; white-space: nowrap; }
@@ -126,7 +128,7 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
   color:var(--cyan);text-shadow:0 0 24px rgba(0,229,255,0.55);letter-spacing:5px;white-space:nowrap;
 }
 .logo em{color:var(--mag);font-style:normal;text-shadow:0 0 24px rgba(255,0,144,0.55);}
-.hdr-input-wrap{display:flex;gap:8px;flex:1;min-width:220px;max-width:460px;}
+.hdr-input-wrap{display:flex;gap:8px;flex:1;min-width:220px;}
 #hdr-meta{font-size:.65rem;color:var(--textD);white-space:nowrap;margin-left:auto;}
 #hdr-meta b{color:var(--cyan);}
 
@@ -182,7 +184,7 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .rm-tabs { display:flex;background:var(--bg2);border-bottom:1px solid var(--border);overflow-x:auto; padding: 6px 12px; gap: 4px; }
 .rm-tab {
   background:var(--bg3);border:none;color:var(--textD);padding:10px 18px;
-  font-family:'JetBrains Mono',monospace;font-size:.75rem;cursor:pointer;
+  font-family:var(--font-mono);font-size:.75rem;cursor:pointer;
   text-transform:uppercase;white-space:nowrap; transition:all .2s;
   clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
 }
@@ -202,7 +204,7 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .markdown-body a:hover { text-decoration:underline; }
 .markdown-body p, .markdown-body ul, .markdown-body ol { margin-bottom: 16px; }
 .markdown-body ul, .markdown-body ol { padding-left: 2em; }
-.markdown-body pre, .markdown-body code { background:var(--bg3); font-family:'JetBrains Mono',monospace;font-size:.85em; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+.markdown-body pre, .markdown-body code { background:var(--bg3); font-family:var(--font-mono);font-size:.85em; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
 .markdown-body code { padding:0.2em 0.5em; }
 .markdown-body pre { padding:16px;overflow:auto; }
 .markdown-body pre code { background:transparent;padding:0; clip-path: none; }
@@ -221,7 +223,7 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 
 /* Status Badges - Fixed Contrast */
 .rmi-status { 
-  font-family:'JetBrains Mono', monospace; font-size:.6rem; padding:3px 7px; text-transform:uppercase; 
+  font-family:var(--font-mono); font-size:.6rem; padding:3px 7px; text-transform:uppercase; 
   font-weight:bold; letter-spacing:1px; flex-shrink:0; position: relative; z-index: 1; 
   background: var(--c); color: var(--bg);
   clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
@@ -234,11 +236,11 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .rmi-title a:hover { color:var(--cyan);text-decoration:underline; }
 .rmi-labels { display:flex;flex-wrap:wrap;gap:4px; }
 .rmi-label { 
-  font-size:0.65rem;padding:3px 7px;font-family:'JetBrains Mono',monospace;font-weight:600;letter-spacing:0.3px; 
+  font-size:0.65rem;padding:3px 7px;font-family:var(--font-mono);font-weight:600;letter-spacing:0.3px; 
   clip-path: polygon(4px 0, 100% 0, 100% calc(100% - 4px), calc(100% - 4px) 100%, 0 100%, 0 4px);
 }
 .rmi-side { display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0; }
-.rmi-comments { display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--textD);font-family:'JetBrains Mono',monospace; }
+.rmi-comments { display:flex;align-items:center;gap:4px;font-size:0.75rem;color:var(--textD);font-family:var(--font-mono); }
 .rmi-assignees { display:flex;gap:4px; }
 .rmi-assignee { width:22px;height:22px; clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px); background: var(--borderB); }
 .rmi-meta { font-size:.75rem;color:var(--textD);font-family:'Oxanium', sans-serif; display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
@@ -285,9 +287,9 @@ select.hex-inner { padding: 5px 8px; cursor: pointer; font-size: .78rem; }
 .fl-item:hover{color:var(--cyan);}
 .fl-cnt{margin-left:auto;color:var(--textD);font-size:.6rem;}
 
-.fl-color{
-  width:10px;height:10px;flex-shrink:0;
-  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
+.lang-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; flex-shrink: 0; font-size: .8rem; font-family: var(--font-nerd);
 }
 
 .radio-grp{display:flex;flex-direction:column;gap:5px;}
@@ -443,15 +445,28 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 .rc-desc{font-size:.72rem;color:var(--text);margin-bottom:8px;line-height:1.55;
   display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 
+/* HOVER REVEAL EFFECT */
+.rc:hover .rc-desc {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+/* GitHub Emoji Parsing Rules */
+.gh-emoji {
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: -0.2em;
+  display: inline-block;
+  background: transparent;
+  clip-path: none;
+}
+
 .rc-stats{display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;}
 .stat{display:flex;align-items:center;gap:3px;font-size:.68rem;color:var(--textD);}
 .stat-click { cursor:pointer;transition:color .2s; }
 .stat-click:hover { color:var(--cyan); }
 .stat svg{width:11px;height:11px;flex-shrink:0;}
-.lang-dot{
-  width:10px;height:10px;flex-shrink:0; display:inline-block;
-  clip-path: polygon(3px 0, 100% 0, 100% calc(100% - 3px), calc(100% - 3px) 100%, 0 100%, 0 3px);
-}
 
 /* ── TAGS ────────────────────────────────────── */
 .tags-wrapper{margin-bottom:10px;}
@@ -522,12 +537,16 @@ input[type=range]{width:100%;accent-color:var(--cyan);margin-top:4px;}
 <div id="hdr">
   <div class="logo">STAR<em>MAP</em></div>
   <div class="hdr-input-wrap">
-    <div class="hex-wrap" style="flex:1; min-width:140px;">
+    <div class="hex-wrap" style="flex:1; min-width:140px; max-width:460px;">
       <input class="inp hex-inner" id="uname-inp" type="text" placeholder="github username" value="sametaor">
     </div>
     <button class="btn" onclick="startFetch(true)">FETCH</button>
     <button class="btn-mag btn" onclick="startFetch(false)" id="refresh-btn" title="Force refresh (bypass cache)">↺</button>
     <button class="vbtn" id="key-btn" onclick="openTokenModal()" title="API Token Settings">🔑</button>
+    <a href="https://github.com/sametaor/starmap" target="_blank" class="btn" style="margin-left: auto; display:flex; gap:6px;">
+      <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      GITHUB
+    </a>
   </div>
   <div id="hdr-meta">Last updated: <b id="last-upd">—</b></div>
 </div>
@@ -728,24 +747,81 @@ const LANG_COLORS = {
   Odin:'#60AFFE',D:'#ba595e',Racket:'#3c5caa',Tcl:'#e4cc98',
 };
 
+// Nerd Font specific unicode mappings 
+const LANG_ICONS = {
+  JavaScript:'\ue781', TypeScript:'\ue8ca', Python:'\ue606', Rust:'\ue68b',
+  Go:'\ue627', C:'\ue61e', 'C++':'\ue61d', 'C#':'\ue7b2', Java:'\ue738',
+  Kotlin:'\ue634', Swift:'\ue755', Dart:'\ue64e', Ruby:'\ue605', PHP:'\ue73d',
+  Shell:'\ue691', Bash:'\ue760', Lua:'\ue620', HTML:'\ue736', CSS:'\ue749',
+  Vue:'\ue6a0', Svelte:'\ue697', Nix:'\ue843', Haskell:'\ue777', Elixir:'\ue62d',
+  Clojure:'\ue768', Perl:'\ue769', R:'\ue881', Dockerfile:'\ue7b0', Zig:'\ue8ef',
+  Assembly:'\ue637', 'Jupyter Notebook':'\ue80f', OCaml:'\ue84e', Scala:'\ue737',
+  Nim:'\ue841', Markdown:'\ue609', SCSS:'\ue614', 'Vim Script':'\ue7c5', 'Vim script': '\ue7c5',
+  PowerShell:'\ue86c', Makefile:'\ue673', QML: '\ue87d', 'Objective-C': '\ue84d', Batchfile: '\uebc4',
+  GLSL: '\ue855', 'Emacs Lisp': '\ue632', 'Vala': '\ue8d1', 'Visual Basic .NET': '\ue77f',
+  CMake: '\ue794', Crystal: '\ue7ac', VBScript: '\ue8d5', 'F#': '\ue7a7', Groovy: '\ue775',
+  Awk: '\ue741', UnrealScript: '\ue8cd', TeX: '\ue69b', Rescript: '\ue688', Fennel: '\ue6af'
+};
+
 const PLATFORM_LABELS = {
-  linux:'Linux', windows:'Windows', macos:'macOS', android:'Android', ios:'iOS', bsd:'BSD',
+  linux:'Linux', windows:'Windows', macos:'MacOS', android:'Android', ios:'iOS', bsd:'BSD',
+};
+
+const PLATFORM_ICONS = {
+  linux:'\uf17c', windows:'\ue8e5', macos:'\ue711', android:'\ue70e', ios:'\udb80\udc37', bsd:'\udb82\udce0',
+};
+
+const PLATFORM_COLORS = {
+  linux: '#F6C228',
+  windows: '#087CD5',
+  macos: '#FFFFFF',
+  android: '#78C259',
+  ios: '#FFFFFF',
+  bsd: '#D20808'
 };
 
 /* ═══════════════════════════════════════════
-   STATE
+   STATE & CACHED RESOURCES
 ═══════════════════════════════════════════ */
 let allRepos         = [];
 let filtered         = [];
 let sortDir          = -1; // -1 desc, 1 asc
 let currentView      = 'grid';
 let currentModalRepo = '';
+let githubEmojis     = {}; // Fetched Emoji Mapping Dictionary
 
 let activeTagFilter  = new Map();
 let activeLangFilter = new Map();
 let activeLicFilter  = new Map();
 let activeArchFilter = new Map(); 
 let activePlatFilter = new Map();
+
+/* ═══════════════════════════════════════════
+   GITHUB EMOJI INTEGRATION
+═══════════════════════════════════════════ */
+async function initGitHubEmojis() {
+  const cached = getLocal('starmap_gh_emojis');
+  if (cached) {
+    try { githubEmojis = JSON.parse(cached); return; } catch(e){}
+  }
+  try {
+    const res = await fetch('https://api.github.com/emojis');
+    if (res.ok) {
+      githubEmojis = await res.json();
+      setLocal('starmap_gh_emojis', JSON.stringify(githubEmojis));
+    }
+  } catch (e) { console.error('Failed to load GitHub emojis', e); }
+}
+
+function parseEmojis(str) {
+  if (!str) return '';
+  return str.replace(/:([a-zA-Z0-9_\-\+]+):/g, (match, p1) => {
+    if (githubEmojis[p1]) {
+      return `<img src="${githubEmojis[p1]}" class="gh-emoji" alt="${match}" title="${match}">`;
+    }
+    return match;
+  });
+}
 
 /* ═══════════════════════════════════════════
    TOKEN MANAGEMENT
@@ -809,7 +885,7 @@ function getContrastYIQ(hexcolor){
 function openRepoModal(fullName, tab = 'readme') {
   currentModalRepo = fullName;
   const parts = fullName.split('/');
-  document.getElementById('rm-title').innerHTML = `${esc(parts[0])} / <span>${esc(parts[1])}</span>`;
+  document.getElementById('rm-title').innerHTML = `${esc(parts[0])} / <span>${parseEmojis(esc(parts[1]))}</span>`;
   document.getElementById('repo-modal-overlay').classList.add('show');
   
   // Prevent background scrolling while modal is open
@@ -840,6 +916,7 @@ async function loadRepoTab(tab) {
       if (!res.ok) throw new Error(`API Error: ${res.status}`);
       
       const html = await res.text();
+      // Emojis in the readme HTML will usually be rendered by GitHub itself, so we just set it.
       content.innerHTML = `<div class="markdown-body">${html}</div>`;
       
     } else if (tab === 'issues') {
@@ -853,7 +930,7 @@ async function loadRepoTab(tab) {
         content.innerHTML = `<div class="rm-empty"><p>No open issues found.</p></div>`;
       } else {
         content.innerHTML = pureIssues.map(i => {
-          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${parseEmojis(esc(l.name))}</span>`).join('');
           const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
           const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
 
@@ -863,7 +940,7 @@ async function loadRepoTab(tab) {
                <div class="rmi-title-wrap">
                   <div class="rmi-title-row">
                      <span class="rmi-status open">Open</span>
-                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${esc(i.title)}</a></div>
+                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${parseEmojis(esc(i.title))}</a></div>
                   </div>
                   ${labelsHtml.length > 0 ? `<div class="rmi-labels">${labelsHtml}</div>` : ''}
                </div>
@@ -891,7 +968,7 @@ async function loadRepoTab(tab) {
         content.innerHTML = `<div class="rm-empty"><p>No open pull requests found.</p></div>`;
       } else {
         content.innerHTML = prs.map(i => {
-          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${esc(l.name)}</span>`).join('');
+          const labelsHtml = (i.labels||[]).map(l => `<span class="rmi-label" style="background:#${l.color};color:${getContrastYIQ(l.color)}">${parseEmojis(esc(l.name))}</span>`).join('');
           const assigneesHtml = i.assignees && i.assignees.length ? `<div class="rmi-assignees">` + i.assignees.map(a => `<img src="${a.avatar_url}" class="rmi-assignee" title="Assigned to ${esc(a.login)}">`).join('') + `</div>` : '';
           const commentsHtml = i.comments > 0 ? `<div class="rmi-comments">💬 ${i.comments}</div>` : '';
           const isDraft = i.draft;
@@ -904,7 +981,7 @@ async function loadRepoTab(tab) {
                <div class="rmi-title-wrap">
                   <div class="rmi-title-row">
                      <span class="rmi-status ${statusClass}">${statusText}</span>
-                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${esc(i.title)}</a></div>
+                     <div class="rmi-title"><a href="${i.html_url}" target="_blank">${parseEmojis(esc(i.title))}</a></div>
                   </div>
                   ${labelsHtml.length > 0 ? `<div class="rmi-labels">${labelsHtml}</div>` : ''}
                </div>
@@ -1090,7 +1167,7 @@ function showPartialWarning(username, cached) {
     banner.style.cssText = `
       position:fixed;bottom:18px;left:50%;transform:translateX(-50%);z-index:300;
       background:#0c0c1c;border:1px solid rgba(255,214,0,.55);color:#ffd600;
-      font-family:'JetBrains Mono',monospace;font-size:.72rem;padding:10px 18px;
+      font-family:var(--font-mono);font-size:.72rem;padding:10px 18px;
       display:flex;align-items:center;gap:14px;box-shadow:0 0 22px rgba(255,214,0,.18);
       max-width:90vw;
     `;
@@ -1125,14 +1202,18 @@ function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
 function showLoading(msg, pct){
   const el = document.getElementById('loading');
   if (el) el.classList.remove('hidden');
-  setLoading(msg, pct);
+  showLoadingBar(msg, pct);
 }
 
-function setLoading(msg, pct){
+function showLoadingBar(msg, pct){
   const st = document.getElementById('ld-status');
   const fl = document.getElementById('ld-fill');
   if (st) st.textContent = msg;
   if (fl) fl.style.width = pct + '%';
+}
+
+function setLoading(msg, pct){
+  showLoadingBar(msg, pct);
 }
 
 /* ═══════════════════════════════════════════
@@ -1422,15 +1503,27 @@ function buildCheckList(containerId, counts, activeMap, filterType, labelMap){
   const sorted = Object.entries(counts).sort((a,b) => b[1]-a[1]);
   const container = document.getElementById(containerId);
   if (!container) return;
+  
   container.innerHTML = sorted.map(([val, cnt]) => {
     const label = labelMap?.[val] || val;
     const state = activeMap.get(val) || 0;
     const cbClass = state === 1 ? 'cb on' : state === -1 ? 'cb exc' : 'cb';
     const cbIcon  = state === 1 ? '✓' : state === -1 ? '✕' : '';
-    const color = filterType==='lang' ? `<span class="fl-color" style="background:${LANG_COLORS[val]||'#555'}"></span>` : '';
+    
+    // Determine the icon and color based on the filter type
+    let iconHtml = '';
+    if (filterType === 'lang') {
+      const nfIcon = LANG_ICONS[val] || '';
+      iconHtml = `<span class="lang-icon" style="color:${LANG_COLORS[val]||'var(--cyan)'}">${nfIcon}</span>`;
+    } else if (filterType === 'plat') {
+      const nfIcon = PLATFORM_ICONS[val] || ''; 
+      const pCol = PLATFORM_COLORS[val] || 'var(--textB)'; // Pull the color here
+      iconHtml = `<span class="lang-icon" style="color:${pCol}">${nfIcon}</span>`;
+    }
+
     return `<label class="fl-item" onclick="event.preventDefault(); cycleFilter('${filterType}','${esc(val)}')">
       <span class="${cbClass}">${cbIcon}</span>
-      ${color}<span>${esc(label)}</span>
+      ${iconHtml}<span>${parseEmojis(esc(label))}</span>
       <span class="fl-cnt">${cnt}</span>
     </label>`;
   }).join('');
@@ -1706,6 +1799,7 @@ function buildCard(repo, idx){
 
   const lang      = repo.language || '';
   const langColor = LANG_COLORS[lang] || '#888';
+  const nfIcon    = LANG_ICONS[lang] || '\ueac4';
   const stars     = fmtNum(repo.stargazers_count);
   const forks     = fmtNum(repo.forks_count);
   const size      = fmtSize(repo.size);
@@ -1748,15 +1842,34 @@ function buildCard(repo, idx){
   const VISIBLE_LIMIT = 8;
   const tagHtml = uniqueTags.map((t, i) => {
     let cls = '';
-    if (t.type === 'plat') cls = 'tag-p';
-    else if (t.type === 'arch2') cls = 'tag-a';
+    let iconHtml = '';
+    let dynamicStyle = '';
+    
+    if (t.type === 'plat') {
+      cls = 'tag-p';
+      if (PLATFORM_COLORS[t.val]) {
+        // Dynamically override the tag's base color variable
+        dynamicStyle = ` style="--t-col: ${PLATFORM_COLORS[t.val]};${i >= VISIBLE_LIMIT ? ' display:none;' : ''}"`;
+      }
+      if (PLATFORM_ICONS[t.val]) {
+        iconHtml = `<span style="font-family:var(--font-nerd); margin-right:4px;">${PLATFORM_ICONS[t.val]}</span>`;
+      }
+    } else if (t.type === 'arch2') {
+      cls = 'tag-a';
+    }
     
     const map = t.type === 'plat' ? activePlatFilter : t.type === 'arch2' ? activeArchFilter : activeTagFilter;
     const state = map.get(t.val) || 0;
     const on    = state === 1 ? ' on' : state === -1 ? ' exc' : '';
-    const hide  = i >= VISIBLE_LIMIT ? ' style="display:none;" data-hidden="true"' : '';
     
-    return `<span class="tag ${cls}${on}" onclick="cycleFilter('${t.type}', '${esc(t.val)}')"${hide}>${esc(t.label)}</span>`;
+    // Manage hide logic if a dynamic style wasn't applied
+    let finalStyle = dynamicStyle;
+    if (i >= VISIBLE_LIMIT && !dynamicStyle) {
+        finalStyle = ' style="display:none;"';
+    }
+    const hideAttr = i >= VISIBLE_LIMIT ? ' data-hidden="true"' : '';
+    
+    return `<span class="tag ${cls}${on}" onclick="cycleFilter('${t.type}', '${esc(t.val)}')"${finalStyle}${hideAttr}>${iconHtml}${parseEmojis(esc(t.label))}</span>`;
   }).join('');
 
   let tagsMarkup = '';
@@ -1770,7 +1883,7 @@ function buildCard(repo, idx){
   }
 
   const statsHtml = [
-    lang ? `<span class="stat"><span class="lang-dot" style="background:${langColor}"></span>${esc(lang)}</span>` : '',
+    lang ? `<span class="stat" title="${esc(lang)}"><span style="color:${langColor};font-size:.85rem;margin-right:3px;font-family:var(--font-nerd);">${nfIcon}</span>${esc(lang)}</span>` : '',
     `<span class="stat">${starSvg}${stars}</span>`,
     `<span class="stat">${forkSvg}${forks}</span>`,
     size ? `<span class="stat">📦 ${size}</span>` : '',
@@ -1801,12 +1914,12 @@ function buildCard(repo, idx){
         <div class="rc-title-area">
           <div class="rc-owner">${esc(ownerName)}</div>
           <div class="rc-head">
-            <span class="rc-name" onclick="openRepoModal('${repo.full_name}', 'readme')" title="Open Deep Dive Modal">${esc(repo.name)}</span>
+            <span class="rc-name" onclick="openRepoModal('${repo.full_name}', 'readme')" title="Open Deep Dive Modal">${parseEmojis(esc(repo.name))}</span>
             ${badges}
           </div>
         </div>
       </div>
-      ${repo.description ? `<div class="rc-desc">${esc(repo.description)}</div>` : ''}
+      ${repo.description ? `<div class="rc-desc">${parseEmojis(esc(repo.description))}</div>` : ''}
       <div class="rc-stats">${statsHtml}</div>
       ${tagsMarkup}
       <div class="rc-actions">${ghLink}${hpLink}${mvLink}</div>
@@ -1818,10 +1931,13 @@ function buildCard(repo, idx){
 /* ═══════════════════════════════════════════
    INIT
 ═══════════════════════════════════════════ */
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
   // Initialize the key icon state on load
   updateKeyIcon(!!getLocal('starmap_gh_token'));
   
+  // Await the GitHub emoji dictionary first so descriptions render properly on initial run
+  await initGitHubEmojis();
+
   startFetch(true);
 
   setInterval(() => {
