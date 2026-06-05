@@ -14,3 +14,8 @@ Enter the Github PAT by pressing the 🔑 button on the top header. We are ready
 
 ## Why I made this
 I have like 2.4k stars as of writing this, and being able to manage or note them down was becoming tedious. Given that I still have only basic elementary level of knowledge in html, css and js, I decided I should try using AI as an exercise to see how it does on this task. Now that I have finally managed to make it work exactly as it should via complete AI usage and minor edits from my own, I can assure you that you're better off learning the damn language yourself and try doing it with your own skills, because I had to use 2-3 AI models just to make it all fall into place! But overall, now that we've committed, here it goes :)
+
+
+## Further Plans
+- [ ] Add support for more Git-based coding platforms (Gitlab, Codeberg, Custom Git Repos)
+- [ ] Add ability to export github stars as browsable list in plaintext, html or json
