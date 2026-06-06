@@ -1513,7 +1513,7 @@ function buildCheckList(containerId, counts, activeMap, filterType, labelMap){
     // Determine the icon and color based on the filter type
     let iconHtml = '';
     if (filterType === 'lang') {
-      const nfIcon = LANG_ICONS[val] || '';
+      const nfIcon = LANG_ICONS[val] || '\ueac4';
       iconHtml = `<span class="lang-icon" style="color:${LANG_COLORS[val]||'var(--cyan)'}">${nfIcon}</span>`;
     } else if (filterType === 'plat') {
       const nfIcon = PLATFORM_ICONS[val] || ''; 
